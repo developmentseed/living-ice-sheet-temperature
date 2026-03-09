@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 import csv
-from pathlib import Path
+import urllib
+import urllib.parse
 from typing import Annotated, Any, Literal
 
+import httpx
 from geojson_pydantic import Feature, FeatureCollection, Point
 from geojson_pydantic.types import Position2D
 from pydantic import BaseModel, BeforeValidator, model_validator
@@ -62,33 +64,37 @@ class Borehole(BaseModel):
         return data
 
     @classmethod
-    def from_csv_path(cls, path: Path) -> list[Borehole]:
+    def from_csv_href(cls, href: str) -> list[Borehole]:
         boreholes = []
-        with open(path) as f:
-            reader = csv.DictReader(
-                f,
-                fieldnames=[
-                    "name",
-                    "location",
-                    "region",
-                    "years_drilled",
-                    "type",
-                    "lat",
-                    "lon",
-                    "ice_thickness",
-                    "drilled_depth",
-                    "has_temperature",
-                    "has_chemistry",
-                    "has_conductivity",
-                    "has_grain_size",
-                    "original_publication",
-                ],
-            )
-            next(reader)  # discard headers
-            for row in reader:
-                if row["name"]:
-                    borehole = Borehole.model_validate(row)
-                    boreholes.append(borehole)
+        url = urllib.parse.urlparse(href)
+        fieldnames = [
+            "name",
+            "location",
+            "region",
+            "years_drilled",
+            "type",
+            "lat",
+            "lon",
+            "ice_thickness",
+            "drilled_depth",
+            "has_temperature",
+            "has_chemistry",
+            "has_conductivity",
+            "has_grain_size",
+            "original_publication",
+        ]
+        if url.scheme:
+            response = httpx.get(href).raise_for_status()
+            reader = csv.DictReader(response.text.splitlines(), fieldnames=fieldnames)
+        else:
+            with open(href) as f:
+                reader = csv.DictReader(f, fieldnames=fieldnames)
+
+        next(reader)  # discard headers
+        for row in reader:
+            if row["name"]:
+                borehole = Borehole.model_validate(row)
+                boreholes.append(borehole)
         return boreholes
 
     @classmethod

@@ -3,6 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -21,11 +22,15 @@ jobs:
         working-directory: frontend
     steps:
       - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v7
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: yarn
           cache-dependency-path: frontend/yarn.lock
+      - name: Update frontend data
+        run: uv run scripts/update-frontend-data
+        working-directory: .
       - name: Install dependencies
         run: yarn install --immutable
       - name: Build
