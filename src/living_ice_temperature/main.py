@@ -12,11 +12,12 @@ def cli() -> None:
 
 @cli.command()
 @click.option("--href")
-def boreholes(href: str | None) -> None:
+@click.option("--no-cache", is_flag=True, help="Ignore the local file cache.")
+def boreholes(href: str | None, no_cache: bool) -> None:
     """Process borehole data into a FeatureCollection"""
     if href is None:
         href = DEFAULT_BOREHOLE_HREF
-    boreholes = Borehole.from_csv_href(href)
+    boreholes = Borehole.from_csv_href(href, no_cache=no_cache)
     features = Borehole.to_feature_collection(boreholes)
     click.echo(features.model_dump_json(indent=2))
 

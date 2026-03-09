@@ -1,0 +1,39 @@
+﻿Name,Location,Region,Years Drilled,Type,Lat,Lon,Ice Thickness,Drilled Depth,Temperature,Chemistry,Conductivity,Grain_Size,Original Publication
+BIS9845,Bindschadler ice stream,West,1998,Borehole,-81.0736,-140.0053,1086,NaN,y,NaN,NaN,NaN,https://www.cambridge.org/core/journals/annals-of-glaciology/article/thermal-regime-and-dynamics-of-the-west-antarctic-ice-sheet/C4DE27B2686B52416C4A0CFB8021920C
+Byrd,Byrd station,West,1966–1968,Borehole,-80.0167,-119.5167,2300,1530,y,NaN,NaN,NaN,https://www.cambridge.org/core/journals/annals-of-glaciology/article/byrd-station-drilling-196669/3A5AB888B8D7F9032F0C435D43D16A51
+CIRD,Crary Ice Rise,West,1987–1988,Borehole,-83.0394,-172.9475,480,NaN,y,NaN,NaN,NaN,https://www.cambridge.org/core/journals/annals-of-glaciology/article/age-of-crary-ice-rise-antarctica-determined-from-temperaturedepth-profiles/C50D6867D25016F78712EADAA18F94A9
+DomeC,Dome C,East,1999–2004,Borehole,-75.1,123.4,3273,3233,y,NaN,y,y,https://www.nature.com/articles/nature02599#Sec10
+DomeF,Dome Fuji,East,2003-2007,Borehole,-77.3167,39.6667,3028,3810,y,NaN,NaN,NaN,https://tc.copernicus.org/articles/14/4021/2020/
+ER9612,Engelhardt Ice Ridge,West,1996,Borehole,-82.6767,-135.8253,1123.9,NaN,y,NaN,NaN,NaN,https://www.cambridge.org/core/journals/annals-of-glaciology/article/thermal-regime-and-dynamics-of-the-west-antarctic-ice-sheet/C4DE27B2686B52416C4A0CFB8021920C
+KIS0012,Kamb ice stream,West,2000,Borehole,-82.3667,-136.4,949.4,NaN,y,NaN,NaN,NaN,https://www.cambridge.org/core/journals/annals-of-glaciology/article/thermal-regime-and-dynamics-of-the-west-antarctic-ice-sheet/C4DE27B2686B52416C4A0CFB8021920C
+KIS006,Kamb ice stream,West,2000,Borehole,-82.4325,-136.4022,1191.8,NaN,y,NaN,NaN,NaN,https://www.cambridge.org/core/journals/annals-of-glaciology/article/thermal-regime-and-dynamics-of-the-west-antarctic-ice-sheet/C4DE27B2686B52416C4A0CFB8021920C
+KIS009,Kamb ice stream,West,2000,Borehole,-82.3997,-136.4044,1033.5,NaN,y,NaN,NaN,NaN,https://www.cambridge.org/core/journals/annals-of-glaciology/article/thermal-regime-and-dynamics-of-the-west-antarctic-ice-sheet/C4DE27B2686B52416C4A0CFB8021920C
+KIS962,Kamb ice stream,West,1996,Borehole,-82.445,-135.9767,1189,NaN,y,NaN,NaN,NaN,https://www.cambridge.org/core/journals/annals-of-glaciology/article/thermal-regime-and-dynamics-of-the-west-antarctic-ice-sheet/C4DE27B2686B52416C4A0CFB8021920C
+Kohnen,Kohnen,East,2002-2006,Borehole,-75,0,2750,2892,y,NaN,NaN,NaN,https://tc.copernicus.org/articles/14/4021/2020/
+LawDome,Law Dome,East,NaN,Borehole,-66.7667,112.8,1196,NaN,y,NaN,NaN,NaN,https://www.cambridge.org/core/journals/journal-of-glaciology/article/inferring-geothermal-heat-flux-from-an-iceborehole-temperature-profile-at-law-dome-east-antarctica/766F206C214CCA9DEB7C205D679FCB31
+SipleDome,Siple Dome,West,1997,Borehole,-81.6583,-148.8083,1004.6,NaN,y,y,y,y,https://www.cambridge.org/core/journals/annals-of-glaciology/article/thermal-regime-and-dynamics-of-the-west-antarctic-ice-sheet/C4DE27B2686B52416C4A0CFB8021920C
+TaylorDome,Taylor Dome,East,NaN,Borehole,-77.666667,158,NaN,554.99,y,y,y,NaN,https://icecores.org/inventory/taylor-dome
+UC9311,Unicorn,West,1993,Borehole,-83.5794,-138.1458,910.6,NaN,y,NaN,NaN,NaN,https://www.cambridge.org/core/journals/annals-of-glaciology/article/thermal-regime-and-dynamics-of-the-west-antarctic-ice-sheet/C4DE27B2686B52416C4A0CFB8021920C
+UC9314,Unicorn,West,1993,Borehole,-83.6792,-138.3717,1091.6,NaN,y,NaN,NaN,NaN,https://www.cambridge.org/core/journals/annals-of-glaciology/article/thermal-regime-and-dynamics-of-the-west-antarctic-ice-sheet/C4DE27B2686B52416C4A0CFB8021920C
+UC9316,Unicorn,West,1993,Borehole,-83.6108,-138.0419,962.3,NaN,y,NaN,NaN,NaN,https://www.cambridge.org/core/journals/annals-of-glaciology/article/thermal-regime-and-dynamics-of-the-west-antarctic-ice-sheet/C4DE27B2686B52416C4A0CFB8021920C
+UC939,Unicorn,West,1993,Borehole,-83.5733,-138.1494,908.4,NaN,y,NaN,NaN,NaN,https://www.cambridge.org/core/journals/annals-of-glaciology/article/thermal-regime-and-dynamics-of-the-west-antarctic-ice-sheet/C4DE27B2686B52416C4A0CFB8021920C
+Vostok,Lake Vostok,East,1990-1998,Borehole,-78.4667,106.8,3750,3488,y,y,y,NaN,https://www.sciencedirect.com/science/article/abs/pii/S0012821X09001629https://www.sciencedirect.com/science/article/abs/pii/S0012821X09001629
+WAISDivide,WAIS Divide,West,2007-2012,Borehole,-79.4676,-112.0865,3455,1766,y,y,y,NaN,https://doi.org/10.7265/N5V69GJW
+WIS881,Whillans Ice Stream,West,1988,Borehole,-83.4994,-138.4239,1035,NaN,y,NaN,NaN,NaN,https://www.cambridge.org/core/journals/annals-of-glaciology/article/thermal-regime-and-dynamics-of-the-west-antarctic-ice-sheet/C4DE27B2686B52416C4A0CFB8021920C
+WIS911,Whillans Ice Stream,West,1991,Borehole,-83.4833,-138.4267,1055,NaN,y,NaN,NaN,NaN,https://www.cambridge.org/core/journals/annals-of-glaciology/article/thermal-regime-and-dynamics-of-the-west-antarctic-ice-sheet/C4DE27B2686B52416C4A0CFB8021920C
+WIS9226,Whillans Ice Stream,West,1992,Borehole,-83.4847,-138.4581,1052,NaN,y,NaN,NaN,NaN,https://www.cambridge.org/core/journals/annals-of-glaciology/article/thermal-regime-and-dynamics-of-the-west-antarctic-ice-sheet/C4DE27B2686B52416C4A0CFB8021920C
+WIS9547,Whillans Ice Stream,West,1995,Borehole,-83.4619,-138.9464,1026.3,NaN,y,NaN,NaN,NaN,https://www.cambridge.org/core/journals/annals-of-glaciology/article/thermal-regime-and-dynamics-of-the-west-antarctic-ice-sheet/C4DE27B2686B52416C4A0CFB8021920C
+,,,,,,,,,,,,,
+,,,,,,,,,,,,,
+,,,,,,,,,,,,,
+,,,,,,,,,,,,,
+,,,,,,,,,,,,,
+,,,,,,,,,,,,,
+,,,,,,,,,,,,,
+,,,,,,,,,,,,,
+,,,,,,,,,,,,,
+,,,,,,,,,,,,,
+,,,,,,,,,,,,,
+,,,,,,,,,,,,,
+,,,,,,,,,,,,,
+,,,,,,,,,,,NaN,NaN,
