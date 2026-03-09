@@ -1,19 +1,16 @@
 from __future__ import annotations
 
 import csv
-import hashlib
 import urllib
 import urllib.parse
 from pathlib import Path
 from typing import Annotated, Any, Literal
 
-import httpx
-import platformdirs
 from geojson_pydantic import Feature, FeatureCollection, Point
 from geojson_pydantic.types import Position2D
 from pydantic import BaseModel, BeforeValidator, model_validator
 
-CACHE_DIR = Path(platformdirs.user_cache_dir("living-ice-temperature"))
+from . import cache
 
 
 def parse_bool(value: Any) -> bool:
@@ -89,7 +86,7 @@ class Borehole(BaseModel):
             "original_publication",
         ]
         if url.scheme:
-            text = _fetch(href, no_cache=no_cache)
+            text = cache.fetch(href, no_cache=no_cache)
         else:
             text = Path(href).read_text()
         reader = csv.DictReader(text.splitlines(), fieldnames=fieldnames)
@@ -117,19 +114,3 @@ class Borehole(BaseModel):
 
     def to_point(self) -> Point:
         return Point(type="Point", coordinates=Position2D(self.lon, self.lat))
-
-
-def _fetch(url: str, *, no_cache: bool = False) -> str:
-    cache_key = hashlib.sha256(url.encode()).hexdigest()
-    cache_path = CACHE_DIR / cache_key
-
-    if not no_cache and cache_path.exists():
-        return cache_path.read_text()
-
-    response = httpx.get(url).raise_for_status()
-    text = response.text
-
-    CACHE_DIR.mkdir(parents=True, exist_ok=True)
-    cache_path.write_text(text)
-
-    return text

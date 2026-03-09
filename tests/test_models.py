@@ -6,7 +6,7 @@ import respx
 from pytest import MonkeyPatch
 from respx import MockRouter
 
-import living_ice_temperature.models as models
+from living_ice_temperature import cache
 from living_ice_temperature.models import Borehole
 
 URL = "https://example.com/BoreholeLocations.csv"
@@ -19,7 +19,7 @@ def test_boreholes(boreholes_path: Path) -> None:
 
 @pytest.fixture
 def cache_dir(tmp_path: Path, monkeypatch: MonkeyPatch) -> Path:
-    monkeypatch.setattr(models, "CACHE_DIR", tmp_path)
+    monkeypatch.setattr(cache, "CACHE_DIR", tmp_path)
     return tmp_path
 
 
