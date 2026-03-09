@@ -48,7 +48,7 @@ def temperature(infile: str, outfile: str, mode: Mode, no_cache: bool) -> None:
     else:
         path = Path(infile)
     temperature = compute_temperature_along_track(path, mode)
-    temperature.to_parquet(outfile)
+    temperature.to_parquet(outfile)  # ty: ignore[invalid-argument-type]
 
 
 if __name__ == "__main__":
