@@ -7,9 +7,17 @@ requires-python = ">=3.13"
 dependencies = [
     "click>=8.3.1",
     "geojson-pydantic>=2.1.0",
+    "geopandas>=1.1.2",
     "httpx>=0.28.1",
+    "numpy>=2.4.3",
+    "obstore>=0.9.1",
+    "pandas>=3.0.1",
     "platformdirs>=4.9.4",
+    "pyarrow>=23.0.1",
     "pydantic>=2.12.5",
+    "pykrige>=1.7.3",
+    "scipy>=1.17.1",
+    "tqdm>=4.67.3",
 ]
 
 [project.scripts]

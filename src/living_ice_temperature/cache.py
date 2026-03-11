@@ -7,12 +7,12 @@ import platformdirs
 CACHE_DIR = Path(platformdirs.user_cache_dir("living-ice-temperature"))
 
 
-def fetch(url: str, *, no_cache: bool = False) -> str:
+def fetch(url: str, *, no_cache: bool = False) -> Path:
     cache_key = hashlib.sha256(url.encode()).hexdigest()
     cache_path = CACHE_DIR / cache_key
 
     if not no_cache and cache_path.exists():
-        return cache_path.read_text()
+        return cache_path
 
     response = httpx.get(url).raise_for_status()
     text = response.text
@@ -20,4 +20,4 @@ def fetch(url: str, *, no_cache: bool = False) -> str:
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
     cache_path.write_text(text)
 
-    return text
+    return cache_path
