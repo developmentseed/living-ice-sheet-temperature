@@ -6,7 +6,7 @@ import click
 from . import cache
 from .models import Borehole
 from .temperature import Mode
-from .temperature import compute_along_track as compute_temperature_along_track
+from .temperature import compute_along_track_from_path as compute_temperature_along_track_from_path
 
 DEFAULT_BOREHOLE_HREF = "https://data.source.coop/englacial/ice-sheet-temperature/AntarcticaBoreholeData/BoreholeLocations.csv"
 
@@ -47,7 +47,7 @@ def temperature(infile: str, outfile: str, mode: Mode, no_cache: bool) -> None:
         path = cache.fetch(infile)
     else:
         path = Path(infile)
-    temperature = compute_temperature_along_track(path, mode)
+    temperature = compute_temperature_along_track_from_path(path, mode)
     temperature.to_parquet(outfile)  # ty: ignore[invalid-argument-type]
 
 
