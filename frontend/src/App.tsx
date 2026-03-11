@@ -1,6 +1,4 @@
 import { Box } from "@chakra-ui/react";
-import "leaflet/dist/leaflet.css";
-import "proj4leaflet";
 import Header from "./components/Header";
 import Map from "./components/Map";
 

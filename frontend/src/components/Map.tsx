@@ -1,22 +1,71 @@
-import { useEffect, useRef } from "react";
+import { useMemo } from "react";
 import { Box, Circle, HStack, Text, VStack } from "@chakra-ui/react";
-import L from "leaflet";
+import { COORDINATE_SYSTEM } from "@deck.gl/core";
+import { OrthographicView } from "@deck.gl/core";
+import { GeoJsonLayer } from "@deck.gl/layers";
+import { DeckGL } from "@deck.gl/react";
+import { Feature, FeatureCollection, Point } from "geojson";
+import proj4 from "proj4";
 import { useBasemap, useBoreholes } from "../hooks/usePublic";
 
-const EPSG3031 = new L.Proj.CRS(
-  "EPSG:3031",
-  "+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs",
-  {
-    resolutions: [8192, 4096, 2048, 1024, 512, 256, 128, 64, 32, 16],
-    origin: [-4194304, 4194304],
-    bounds: L.bounds([-4194304, -4194304], [4194304, 4194304]),
-  },
-);
+const EPSG3031 =
+  "+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs";
 
-const COLOR_TEMPERATURE = "#3182ce";
-const COLOR_TEMPERATURE_CHEMISTRY = "#38a169";
-const COLOR_TEMPERATURE_GRAIN_SIZE = "#d69e2e";
-const COLOR_ALL = "#e53e3e";
+const project = proj4("EPSG:4326", EPSG3031);
+
+const COLOR_TEMPERATURE: [number, number, number] = [49, 130, 206];
+const COLOR_TEMPERATURE_CHEMISTRY: [number, number, number] = [56, 161, 105];
+const COLOR_TEMPERATURE_GRAIN_SIZE: [number, number, number] = [214, 158, 46];
+const COLOR_ALL: [number, number, number] = [229, 62, 62];
+
+function rgbToHex([r, g, b]: [number, number, number]): string {
+  return "#" + [r, g, b].map((c) => c.toString(16).padStart(2, "0")).join("");
+}
+
+function projectBoreholes(data: FeatureCollection): FeatureCollection {
+  return {
+    ...data,
+    features: data.features.map((feature) => {
+      const point = feature.geometry as Point;
+      const [x, y] = project.forward(point.coordinates);
+      return {
+        ...feature,
+        geometry: { ...point, coordinates: [x, y] },
+      };
+    }),
+  };
+}
+
+function boreholeColor(feature: Feature): [number, number, number] {
+  const { has_chemistry, has_grain_size } = feature.properties ?? {};
+  if (has_chemistry && has_grain_size) return COLOR_ALL;
+  if (has_chemistry) return COLOR_TEMPERATURE_CHEMISTRY;
+  if (has_grain_size) return COLOR_TEMPERATURE_GRAIN_SIZE;
+  return COLOR_TEMPERATURE;
+}
+
+const BASEMAP_CATEGORY_COLORS: Record<
+  string,
+  [number, number, number, number]
+> = {
+  "Ice shelf": [207, 225, 235, 255],
+  "Ice tongue": [207, 225, 235, 255],
+  Land: [240, 240, 240, 255],
+  Rumple: [240, 240, 240, 255],
+  Ocean: [163, 189, 209, 255],
+};
+const DEFAULT_BASEMAP_COLOR: [number, number, number, number] = [
+  222, 220, 210, 255,
+];
+
+const VIEW = new OrthographicView({ id: "ortho", flipY: false });
+
+const INITIAL_VIEW_STATE = {
+  target: [0, 0, 0] as [number, number, number],
+  zoom: -13.5,
+  minZoom: -14,
+  maxZoom: -4,
+};
 
 function LegendItem({ color, label }: { color: string; label: string }) {
   return (
@@ -28,91 +77,58 @@ function LegendItem({ color, label }: { color: string; label: string }) {
 }
 
 export default function Map() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<L.Map | null>(null);
   const basemapResult = useBasemap();
-  const boreholes = useBoreholes();
+  const boreholesResult = useBoreholes();
 
-  useEffect(() => {
-    if (!containerRef.current || mapRef.current) return;
+  const projectedBoreholes = useMemo(
+    () =>
+      boreholesResult.data ? projectBoreholes(boreholesResult.data) : null,
+    [boreholesResult.data],
+  );
 
-    mapRef.current = L.map(containerRef.current, {
-      crs: EPSG3031,
-      center: [-90, 0],
-      zoom: 0,
-      maxZoom: 9,
-      minZoom: 0,
-      attributionControl: true,
-    });
-
-    return () => {
-      mapRef.current?.remove();
-      mapRef.current = null;
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!mapRef.current || !basemapResult.data) return;
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const layer = new (L.Proj as any).GeoJSON(basemapResult.data, {
-      attribution: "Norwegian Polar Institute's Quantarctica package",
-      pane: "tilePane",
-      style: (feature?: GeoJSON.Feature) => {
-        const category = feature?.properties?.Category ?? "";
-        let fillColor = "#dedcd2";
-        if (category === "Ice shelf" || category === "Ice tongue") {
-          fillColor = "#cfe1eb";
-        } else if (category === "Land" || category === "Rumple") {
-          fillColor = "#f0f0f0";
-        } else if (category === "Ocean") {
-          fillColor = "#a3bdd1";
-        }
-        return {
-          fillColor,
-          stroke: false,
-          fillOpacity: 1,
-        };
-      },
-    }).addTo(mapRef.current);
-
-    return () => {
-      layer.remove();
-    };
-  }, [basemapResult.data]);
-
-  useEffect(() => {
-    if (!mapRef.current || !boreholes.data) return;
-
-    const layer = new L.GeoJSON(boreholes.data, {
-      pointToLayer: (feature, latlng) => {
-        const { has_chemistry, has_grain_size } = feature.properties;
-        let fillColor = COLOR_TEMPERATURE;
-        if (has_chemistry && has_grain_size) {
-          fillColor = COLOR_ALL;
-        } else if (has_chemistry) {
-          fillColor = COLOR_TEMPERATURE_CHEMISTRY;
-        } else if (has_grain_size) {
-          fillColor = COLOR_TEMPERATURE_GRAIN_SIZE;
-        }
-        return new L.CircleMarker(latlng, {
-          radius: 6,
-          fillColor,
-          color: "#fff",
-          weight: 1,
-          fillOpacity: 0.8,
-        }).bindTooltip(feature.properties.name);
-      },
-    }).addTo(mapRef.current);
-
-    return () => {
-      layer.remove();
-    };
-  }, [boreholes.data]);
+  const layers = [
+    basemapResult.data &&
+      new GeoJsonLayer({
+        id: "basemap",
+        data: basemapResult.data,
+        coordinateSystem: COORDINATE_SYSTEM.CARTESIAN,
+        stroked: false,
+        filled: true,
+        getFillColor: (feature: Feature) => {
+          const category = feature.properties?.Category ?? "";
+          return BASEMAP_CATEGORY_COLORS[category] ?? DEFAULT_BASEMAP_COLOR;
+        },
+      }),
+    projectedBoreholes &&
+      new GeoJsonLayer({
+        id: "boreholes",
+        data: projectedBoreholes,
+        coordinateSystem: COORDINATE_SYSTEM.CARTESIAN,
+        pointType: "circle",
+        filled: true,
+        stroked: true,
+        getFillColor: (feature: Feature) => [...boreholeColor(feature), 204],
+        getLineColor: [255, 255, 255, 255],
+        getLineWidth: 1,
+        getPointRadius: 6,
+        pointRadiusUnits: "pixels",
+        lineWidthUnits: "pixels",
+        lineWidthMinPixels: 1,
+        pickable: true,
+      }),
+  ];
 
   return (
     <Box flex="1" position="relative">
-      <Box ref={containerRef} position="absolute" inset="0" />
+      <DeckGL
+        views={VIEW}
+        initialViewState={INITIAL_VIEW_STATE}
+        controller
+        layers={layers}
+        getTooltip={({ object }: { object?: Feature }) =>
+          object?.properties?.name ?? null
+        }
+      />
       <VStack
         position="absolute"
         bottom="6"
@@ -128,16 +144,16 @@ export default function Map() {
         <Text fontWeight="bold" fontSize="sm">
           Boreholes
         </Text>
-        <LegendItem color={COLOR_TEMPERATURE} label="Temperature" />
+        <LegendItem color={rgbToHex(COLOR_TEMPERATURE)} label="Temperature" />
         <LegendItem
-          color={COLOR_TEMPERATURE_CHEMISTRY}
+          color={rgbToHex(COLOR_TEMPERATURE_CHEMISTRY)}
           label="Temperature + chemistry"
         />
         <LegendItem
-          color={COLOR_TEMPERATURE_GRAIN_SIZE}
+          color={rgbToHex(COLOR_TEMPERATURE_GRAIN_SIZE)}
           label="Temperature + grain size"
         />
-        <LegendItem color={COLOR_ALL} label="All three" />
+        <LegendItem color={rgbToHex(COLOR_ALL)} label="All three" />
       </VStack>
     </Box>
   );
