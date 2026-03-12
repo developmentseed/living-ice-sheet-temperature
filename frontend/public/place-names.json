@@ -1,0 +1,564 @@
+{
+  "type": "FeatureCollection",
+  "name": "place-names",
+  "crs": {
+    "type": "name",
+    "properties": { "name": "urn:ogc:def:crs:EPSG::3031" }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "Place_Name": "Brunt#Ice Shelf",
+        "LabelClass": "IceShelf"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-637705.970671106479131, 1539558.403200484113768]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Place_Name": "Filchner#Ice Shelf",
+        "LabelClass": "IceShelf"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-770517.917174017289653, 918267.4959503429709]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Place_Name": "George VI#Ice Shelf",
+        "LabelClass": "IceShelf"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1853594.659408713690937, 748900.854469104786403]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Place_Name": "Larsen#Ice Shelf",
+        "LabelClass": "IceShelf"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2195634.990436981897801, 1142975.231059990590438]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Place_Name": "Ronne#Ice Shelf",
+        "LabelClass": "IceShelf"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1096375.351255365647376, 607730.780990557861514]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Place_Name": "Wilkins#Ice Shelf",
+        "LabelClass": "IceShelf"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2048487.785867408849299, 645885.717917383881286]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "Place_Name": "Fimbul-#isen", "LabelClass": "IceShelf" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-18418.78042468276908, 2110583.18589255027473]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Place_Name": "Riiser-Larsen-#isen",
+        "LabelClass": "IceShelf"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-543874.170936438138597, 1778932.256133339134976]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Place_Name": "Amery#Ice Shelf",
+        "LabelClass": "IceShelf"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2101395.050459515303373, 723568.342303440207615]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Place_Name": "West#Ice Shelf",
+        "LabelClass": "IceShelf"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2522123.764170152600855, 220657.237374218733748]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Place_Name": "Shackleton#Ice Shelf",
+        "LabelClass": "IceShelf"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2597344.976473937742412, -430547.420451980142388]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Place_Name": "Ross#Ice Shelf",
+        "LabelClass": "IceShelf"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-14151.0710608415975, -973363.447801124071702]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Place_Name": "Getz#Ice Shelf",
+        "LabelClass": "IceShelf"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1410332.727192467078567, -987525.606964024831541]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Place_Name": "Abbot#Ice Shelf",
+        "LabelClass": "IceShelf"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1877626.703913936624303, -197346.518829287611879]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "Place_Name": "Graham Land", "LabelClass": "Land" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2367036.296087022405118, 1180160.762823905097321]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Place_Name": "Princess Elizabeth Land",
+        "LabelClass": "Land"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2329405.612811604514718, 395382.405890297552105]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "Place_Name": "Wilkes Land", "LabelClass": "Land" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1997539.394439056282863, -1153279.907096271868795]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "Place_Name": "Victoria Land", "LabelClass": "Land" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [503375.883085821638815, -1646468.325273029971868]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "Place_Name": "Coats Land", "LabelClass": "Land" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-654910.859500365913846, 1258072.055859526852146]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Place_Name": "Dronning Maud Land",
+        "LabelClass": "Land"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [363714.156174856936559, 1711140.570383780403063]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "Place_Name": "Ellsworth Land", "LabelClass": "Land" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1559524.989654338220134, 274986.332765149301849]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "Place_Name": "Wilhelm II Land", "LabelClass": "Land" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2531757.867213498335332, -0.000000000969301]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Place_Name": "Mac. Robertson Land",
+        "LabelClass": "Land"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1988887.225215327460319, 927433.344324552104808]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "Place_Name": "George V Land", "LabelClass": "Land" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1252052.184922130312771, -2003702.343692177440971]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "Place_Name": "Kemp Land", "LabelClass": "Land" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2087663.081212832126766, 1329988.063626433024183]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "Place_Name": "Marie Byrd Land", "LabelClass": "Land" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-943257.077852379414253, -544589.727813091361895]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "Place_Name": "Oates Land", "LabelClass": "Land" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [690377.649417406413704, -1846498.90005847485736]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "Place_Name": "Enderby Land", "LabelClass": "Land" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1681080.123837569495663, 1410593.711891560116783]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "Place_Name": "Queen Mary Land", "LabelClass": "Land" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2517888.63271470554173, -264640.759225619607605]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "Place_Name": "Palmer Land", "LabelClass": "Land" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1837096.513707723002881, 856652.173111760057509]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "Place_Name": "Terre Adélie", "LabelClass": "Land" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1660982.608003164641559, -1910741.917190400650725]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Place_Name": "Queen Elizabeth Land",
+        "LabelClass": "Land"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-491614.2101492555812, 468995.965091848745942]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Place_Name": "Transantarctic Mountains",
+        "LabelClass": "Land"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [46193.876196952354803, -541524.761492820573039]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Place_Name": "Antarctic Peninsula",
+        "LabelClass": "Land"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2039631.605610910570249, 951095.83751134283375]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "Place_Name": "West Antarctica", "LabelClass": "Region" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-993695.812675475142896, -205090.3108311209362]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "Place_Name": "East Antarctica", "LabelClass": "Region" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [908463.087257435545325, -61673.568375861737877]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Place_Name": "West Antarctic Ice Sheet",
+        "LabelClass": "IceSheet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1008792.311881291680038, -378700.051698013441637]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Place_Name": "East Antarctic Ice Sheet",
+        "LabelClass": "IceSheet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [919785.461661797948182, -254153.933250025380403]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "Place_Name": "Berkner#Island", "LabelClass": "Island" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-827634.32141149090603, 764859.763142605312169]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Place_Name": "Roosevelt#Island",
+        "LabelClass": "Island"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-359642.846031171735376, -1114654.387981580104679]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "Place_Name": "Thurston#Island", "LabelClass": "Island" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1929678.763436113717034, -318314.054874746594578]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Place_Name": "Alexander Island",
+        "LabelClass": "Island"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1978742.385855018161237, 696925.516716429963708]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Place_Name": "South Shetland#Islands",
+        "LabelClass": "Island"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2639214.226109500974417, 1549877.721845076419413]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "Place_Name": "Weddell Sea", "LabelClass": "Sea" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1439628.910693652695045, 1381919.126818150514737]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "Place_Name": "Ross Sea", "LabelClass": "Sea" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-157574.505518460122403, -1483849.543573453789577]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "Place_Name": "Gough Island", "LabelClass": "Island" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-993010.50651868339628, 5664529.155233334749937]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "Place_Name": "Bouvetøya", "LabelClass": "Island" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [233621.735589060757775, 3983134.475455227773637]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Place_Name": "Prince Edward#Islands",
+        "LabelClass": "Island"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3017165.84139777906239, 3887076.787459817714989]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "Place_Name": "Iles Crozet", "LabelClass": "Island" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3884177.340936924796551, 3123703.74480653507635]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "Place_Name": "Iles Kerguelen", "LabelClass": "Island" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4314931.167753115296364, 1612534.581877606455237]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Place_Name": "Heard Island and#McDonald Islands",
+        "LabelClass": "Island"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3971200.413953309878707, 1211273.061429738532752]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Place_Name": "Macquarie Island",
+        "LabelClass": "Island"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1430175.610668340232223, -3698896.381593619473279]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "Place_Name": "Campbell Island", "LabelClass": "Island" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [792860.82228965847753, -4141486.247820583172143]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Place_Name": "Auckland Islands",
+        "LabelClass": "Island"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1065504.951278359163553, -4305511.294858289882541]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "Place_Name": "Snares Islands", "LabelClass": "Island" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1108009.659323112806305, -4635608.047274639829993]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Place_Name": "Antipodes Islands",
+        "LabelClass": "Island"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [97323.320983475874527, -4563635.486306175589561]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "Place_Name": "Bounty Islands", "LabelClass": "Island" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [80706.441480826819316, -4800398.416429046541452]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Place_Name": "South Orkney#Islands",
+        "LabelClass": "Island"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2329974.331271801143885, 2280415.961444897111505]
+      }
+    }
+  ]
+}
