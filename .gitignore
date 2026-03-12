@@ -14,7 +14,6 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
 lib64/
 parts/
 sdist/
@@ -216,3 +215,5 @@ __marimo__/
 .streamlit/secrets.toml
 data/FullDataSet_Randomized.txt
 data/*.parquet
+*.fgb
+*.pmtiles

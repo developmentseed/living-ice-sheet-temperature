@@ -1,1 +1,1 @@
-{"root":["./src/app.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/components/header.tsx","./src/components/map.tsx","./src/hooks/usepublic.ts"],"version":"5.9.3"}
+{"root":["./src/app.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/components/header.tsx","./src/components/map.tsx","./src/hooks/usepublic.ts","./src/layers/temperaturelayer.ts","./src/lib/antarctictileset2d.ts"],"version":"5.9.3"}

@@ -4,7 +4,7 @@ import Map from "./components/Map";
 
 function App() {
   return (
-    <Box height="100vh" display="flex" flexDirection="column">
+    <Box height="100vh" display="flex" flexDirection="column" overflow="hidden">
       <Header />
       <Map />
     </Box>
