@@ -35,14 +35,14 @@ class Client:
                 if not path.endswith(".csv"):
                     continue
                 path_parts = path.split("/")
-                if len(path_parts) != 2:
+                if len(path_parts) != 3:
                     continue
-                parts = path_parts[1].split(".")[0].split("_")
+                parts = path_parts[-1].split(".")[0].split("_")
                 if not len(parts) == 2:
                     continue
                 name = parts[0].lower()
                 variable = parts[1]
                 urls[variable][name] = urllib.parse.urljoin(
-                    HTTP_URL, f"{self.config.borehole_data_prefix}/{path}"
+                    self.http_store.url + "/", path
                 )
         return urls

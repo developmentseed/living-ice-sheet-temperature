@@ -5,8 +5,8 @@ import pandas
 import tqdm
 from obstore.store import HTTPStore
 
+from .borehole import Borehole
 from .client import Client
-from .models import Borehole
 from .temperature import Mode, compute_along_track
 
 
