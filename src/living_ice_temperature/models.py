@@ -1,22 +1,13 @@
 from __future__ import annotations
 
 import csv
-import urllib.parse
-from collections import defaultdict
 from typing import Annotated, Any, Literal
 
 from geojson_pydantic import Feature, FeatureCollection, Point
 from geojson_pydantic.types import Position2D
-from obstore.store import S3Store
 from pydantic import BaseModel, BeforeValidator, model_validator
 
-from . import cache
-
-BOREHOLE_URL = "https://data.source.coop/englacial/ice-sheet-temperature/AntarcticaBoreholeData/BoreholeLocations.csv"
-BOREHOLE_DATA_URL = (
-    "https://data.source.coop/englacial/ice-sheet-temperature/AntarcticaBoreholeData/"
-)
-BOREHOLE_DATA_S3_URL = "s3://us-west-2.opendata.source.coop/englacial/ice-sheet-temperature/AntarcticaBoreholeData/"
+from .client import Client
 
 
 def parse_bool(value: Any) -> bool:
@@ -75,7 +66,7 @@ class Borehole(BaseModel):
         return data
 
     @classmethod
-    def from_csv_href(cls, *, no_cache: bool = False) -> list[Borehole]:
+    def from_csv(cls, text: str, client: Client | None = None) -> list[Borehole]:
         boreholes = []
         fieldnames = [
             "name",
@@ -93,13 +84,11 @@ class Borehole(BaseModel):
             "has_grain_size",
             "original_publication",
         ]
-        path = cache.fetch(BOREHOLE_URL, no_cache=no_cache)
-        text = path.read_text()
         reader = csv.DictReader(text.splitlines(), fieldnames=fieldnames)
 
         next(reader)  # discard headers
 
-        data_urls = get_data_urls()
+        data_urls = (client or Client()).get_borehole_data_urls()
         for row in reader:
             if row["name"]:
                 borehole = Borehole.model_validate(row)
@@ -131,25 +120,3 @@ class Borehole(BaseModel):
 
     def to_point(self) -> Point:
         return Point(type="Point", coordinates=Position2D(self.lon, self.lat))
-
-
-def get_data_urls() -> defaultdict[str, dict[str, str]]:
-    store = S3Store.from_url(BOREHOLE_DATA_S3_URL, skip_signature=True, config={
-        "aws_region": "us-west-2"
-    })
-    urls = defaultdict(dict)
-    for list_result in store.list():
-        for object_meta in list_result:
-            path = object_meta["path"]
-            if not path.endswith(".csv"):
-                continue
-            path_parts = path.split("/")
-            if len(path_parts) != 2:
-                continue
-            parts = path_parts[1].split(".")[0].split("_")
-            if not len(parts) == 2:
-                continue
-            name = parts[0].lower()
-            variable = parts[1]
-            urls[variable][name] = urllib.parse.urljoin(BOREHOLE_DATA_URL, path)
-    return urls
