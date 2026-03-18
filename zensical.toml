@@ -1,8 +1,8 @@
 [project]
-site_name = "Living Ice Temperature"
+site_name = "Living Ice Sheet Temperature"
 site_description = "Radar-derived ice temperature data visualization for Antarctica."
-site_url = "https://developmentseed.github.io/living-ice-temperature/docs/"
-repo_url = "https://github.com/developmentseed/living-ice-temperature"
+site_url = "https://developmentseed.github.io/living-ice-sheet-temperature/docs/"
+repo_url = "https://github.com/developmentseed/living-ice-sheet-temperature"
 copyright = "Copyright &copy; 2026 Development Seed"
 edit_uri = "edit/main/docs/"
 

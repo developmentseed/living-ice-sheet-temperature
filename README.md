@@ -1,7 +1,7 @@
 # Living Ice Sheet Temperature
 
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/developmentseed/living-ice-temperature/ci.yml?style=for-the-badge&link=https%3A%2F%2Fgithub.com%2Fdevelopmentseed%2Fliving-ice-temperature%2Factions%2Fworkflows%2Fci.yml)
-![GitHub deployments](https://img.shields.io/github/deployments/developmentseed/living-ice-temperature/github-pages?style=for-the-badge&link=https%3A%2F%2Fdevelopmentseed.org%2Fliving-ice-temperature%2F)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/developmentseed/living-ice-sheet-temperature/ci.yml?style=for-the-badge&link=https%3A%2F%2Fgithub.com%2Fdevelopmentseed%2Fliving-ice-sheet-temperature%2Factions%2Fworkflows%2Fci.yml)
+![GitHub deployments](https://img.shields.io/github/deployments/developmentseed/living-ice-sheet-temperature/github-pages?style=for-the-badge&link=https%3A%2F%2Fdevelopmentseed.org%2Fliving-ice-sheet-temperature%2F)
 
 Frontend application and backend processing for radar-derived ice temperature data in Antarctica.
 

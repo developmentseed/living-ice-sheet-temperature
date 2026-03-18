@@ -110,7 +110,7 @@ export default function Map() {
     return (
       <AbsoluteCenter>
         <VStack>
-          Loading Living Ice Temperature...
+          Loading Living Ice Sheet Temperature...
           <Spinner />
         </VStack>
       </AbsoluteCenter>
