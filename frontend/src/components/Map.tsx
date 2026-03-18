@@ -3,7 +3,6 @@ import {
   AbsoluteCenter,
   Box,
   Checkbox,
-  Circle,
   HStack,
   Spinner,
   Text,
@@ -11,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { COORDINATE_SYSTEM } from "@deck.gl/core";
 import { OrthographicView } from "@deck.gl/core";
-import { GeoJsonLayer } from "@deck.gl/layers";
+import { GeoJsonLayer, IconLayer } from "@deck.gl/layers";
 import { DeckGL } from "@deck.gl/react";
 import { Feature, FeatureCollection, Point } from "geojson";
 import { PMTiles } from "pmtiles";
@@ -32,6 +31,24 @@ const BOREHOLE_COLORS = {
   temperatureChemistry: { hex: "#38a169", rgb: [56, 161, 105] as Rgb },
   temperatureGrainSize: { hex: "#d69e2e", rgb: [214, 158, 46] as Rgb },
   all: { hex: "#e53e3e", rgb: [229, 62, 62] as Rgb },
+};
+
+function createTriangleIcon(fill: Rgb): { url: string; width: number; height: number; anchorY: number } {
+  const [r, g, b] = fill;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><polygon points="16,2 30,28 2,28" fill="rgb(${r},${g},${b})" fill-opacity="0.8" stroke="black" stroke-width="1"/></svg>`;
+  return {
+    url: `data:image/svg+xml;base64,${btoa(svg)}`,
+    width: 32,
+    height: 32,
+    anchorY: 28,
+  };
+}
+
+const BOREHOLE_ICONS = {
+  temperature: createTriangleIcon(BOREHOLE_COLORS.temperature.rgb),
+  temperatureChemistry: createTriangleIcon(BOREHOLE_COLORS.temperatureChemistry.rgb),
+  temperatureGrainSize: createTriangleIcon(BOREHOLE_COLORS.temperatureGrainSize.rgb),
+  all: createTriangleIcon(BOREHOLE_COLORS.all.rgb),
 };
 
 const BASEMAP_CATEGORY_COLORS: Record<string, Rgba> = {
@@ -87,20 +104,15 @@ export default function Map() {
     showTemperatures && createTemperatureLayer(pmtiles),
     showBoreholes &&
       projectedBoreholes &&
-      new GeoJsonLayer({
+      new IconLayer({
         id: "boreholes",
-        data: projectedBoreholes,
+        data: projectedBoreholes.features,
         coordinateSystem: COORDINATE_SYSTEM.CARTESIAN,
-        pointType: "circle",
-        filled: true,
-        stroked: true,
-        getFillColor: (feature: Feature) => [...boreholeColor(feature), 204],
-        getLineColor: [255, 255, 255, 255],
-        getLineWidth: 1,
-        getPointRadius: 8,
-        pointRadiusUnits: "pixels",
-        lineWidthUnits: "pixels",
-        lineWidthMinPixels: 1,
+        getPosition: (feature: Feature) =>
+          (feature.geometry as Point).coordinates as [number, number],
+        getIcon: (feature: Feature) => boreholeIcon(feature),
+        getSize: 24,
+        sizeUnits: "pixels",
         pickable: true,
         autoHighlight: true,
       }),
@@ -211,7 +223,9 @@ function Legend({
 function LegendItem({ color, label }: { color: string; label: string }) {
   return (
     <HStack gap="2">
-      <Circle size="12px" bg={color} />
+      <svg width="12" height="12" viewBox="0 0 12 12" style={{ flexShrink: 0 }}>
+        <polygon points="6,1 11,11 1,11" fill={color} />
+      </svg>
       <Text fontSize="xs">{label}</Text>
     </HStack>
   );
@@ -231,10 +245,10 @@ function projectPoints(data: FeatureCollection): FeatureCollection {
   };
 }
 
-function boreholeColor(feature: Feature): Rgb {
+function boreholeIcon(feature: Feature) {
   const { has_chemistry, has_grain_size } = feature.properties ?? {};
-  if (has_chemistry && has_grain_size) return BOREHOLE_COLORS.all.rgb;
-  if (has_chemistry) return BOREHOLE_COLORS.temperatureChemistry.rgb;
-  if (has_grain_size) return BOREHOLE_COLORS.temperatureGrainSize.rgb;
-  return BOREHOLE_COLORS.temperature.rgb;
+  if (has_chemistry && has_grain_size) return BOREHOLE_ICONS.all;
+  if (has_chemistry) return BOREHOLE_ICONS.temperatureChemistry;
+  if (has_grain_size) return BOREHOLE_ICONS.temperatureGrainSize;
+  return BOREHOLE_ICONS.temperature;
 }
