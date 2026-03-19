@@ -17,7 +17,7 @@ def cli() -> None:
 
 @cli.command()
 def boreholes() -> None:
-    """Process borehole data into a FeatureCollection"""
+    """Print borehole data as a FeatureCollection"""
     client = Client()
     text = client.get_borehole_locations_text()
     boreholes = Borehole.from_csv(text, client=client)
