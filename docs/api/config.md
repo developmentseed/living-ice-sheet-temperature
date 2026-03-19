@@ -1,0 +1,3 @@
+# Config
+
+::: livist.config

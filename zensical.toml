@@ -5,6 +5,16 @@ site_url = "https://developmentseed.github.io/living-ice-sheet-temperature/docs/
 repo_url = "https://github.com/developmentseed/living-ice-sheet-temperature"
 copyright = "Copyright &copy; 2026 Development Seed"
 edit_uri = "edit/main/docs/"
+nav = [
+    "index.md",
+    {"API" = [
+        "api/index.md",
+        "api/borehole.md",
+        "api/client.md",
+        "api/config.md",
+        "api/temperature.md",
+    ]}
+]
 
 [project.theme]
 favicon = "thermometer-snowflake.png"
@@ -43,3 +53,12 @@ toggle.name = "Switch to dark mode"
 scheme = "slate"
 toggle.icon = "lucide/moon"
 toggle.name = "Switch to light mode"
+
+[project.plugins.mkdocstrings.handlers.python]
+inventories = ["https://docs.python.org/3/objects.inv"]
+paths = ["src"]
+
+[project.plugins.mkdocstrings.handlers.python.options]
+docstring_style = "google"
+inherited_members = true
+show_source = false

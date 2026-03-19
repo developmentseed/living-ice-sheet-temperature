@@ -11,6 +11,14 @@ from .client import Client
 
 
 def parse_bool(value: Any) -> bool:
+    """Parses a value to bool, treating ``"NaN"`` as False.
+
+    Args:
+        value: The value to parse.
+
+    Returns:
+        False if the value is ``"NaN"``, otherwise ``bool(value)``.
+    """
     if value == "NaN":
         return False
     else:
@@ -18,6 +26,29 @@ def parse_bool(value: Any) -> bool:
 
 
 class Borehole(BaseModel):
+    """An Antarctic borehole with location, metadata, and data URLs.
+
+    Attributes:
+        name: Short identifier for the borehole.
+        location: Human-readable location description.
+        region: East or West Antarctica.
+        start_year: First year the borehole was drilled, or None if unknown.
+        end_year: Last year the borehole was drilled, or None if unknown.
+        type: Borehole type descriptor.
+        lat: Latitude in decimal degrees.
+        lon: Longitude in decimal degrees.
+        ice_thickness: Ice thickness at the borehole in meters.
+        drilled_depth: Depth drilled in meters.
+        original_publication: Citation for the original data publication.
+        has_temperature: Whether temperature data is available.
+        has_chemistry: Whether chemistry data is available.
+        has_conductivity: Whether conductivity data is available.
+        has_grain_size: Whether grain size data is available.
+        temperature_data_url: URL to the temperature CSV, if available.
+        chemistry_data_url: URL to the chemistry CSV, if available.
+        grainsize_data_url: URL to the grain size CSV, if available.
+    """
+
     name: str
     location: str
     region: Literal["East", "West"]
@@ -67,6 +98,16 @@ class Borehole(BaseModel):
 
     @classmethod
     def from_csv(cls, text: str, client: Client | None = None) -> list[Borehole]:
+        """Parses borehole locations from CSV text and attaches data URLs.
+
+        Args:
+            text: Raw CSV content with borehole location data.
+            client: Optional client for fetching data URLs. Creates a default
+                client if not provided.
+
+        Returns:
+            A list of Borehole instances with data URLs populated.
+        """
         boreholes = []
         fieldnames = [
             "name",
@@ -106,12 +147,25 @@ class Borehole(BaseModel):
 
     @classmethod
     def to_feature_collection(cls, boreholes: list[Borehole]) -> FeatureCollection:
+        """Converts a list of boreholes to a GeoJSON FeatureCollection.
+
+        Args:
+            boreholes: The boreholes to convert.
+
+        Returns:
+            A GeoJSON FeatureCollection with one Point feature per borehole.
+        """
         return FeatureCollection(
             type="FeatureCollection",
             features=[borehole.to_feature() for borehole in boreholes],
         )
 
     def to_feature(self) -> Feature:
+        """Converts this borehole to a GeoJSON Feature.
+
+        Returns:
+            A GeoJSON Feature with a Point geometry and borehole properties.
+        """
         return Feature(
             type="Feature",
             geometry=self.to_point(),
@@ -119,4 +173,9 @@ class Borehole(BaseModel):
         )
 
     def to_point(self) -> Point:
+        """Converts this borehole's location to a GeoJSON Point.
+
+        Returns:
+            A GeoJSON Point at the borehole's longitude and latitude.
+        """
         return Point(type="Point", coordinates=Position2D(self.lon, self.lat))

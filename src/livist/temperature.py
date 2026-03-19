@@ -22,11 +22,14 @@ T_REF = 251.0
 
 
 class Mode(StrEnum):
+    """Temperature inversion mode, determining which residual function to use."""
+
     chemistry = "chem"
     conductivity = "cond"
     pure_ice = "pure"
 
     def residual_function(self) -> Callable[[float, float], float]:
+        """Returns the residual function for this mode."""
         match self:
             case Mode.chemistry:
                 return chemistry_residual
@@ -39,6 +42,22 @@ class Mode(StrEnum):
 def compute_along_track(
     data_frame: DataFrame, mode: Mode, to_wgs84: bool = False
 ) -> GeoDataFrame:
+    """Computes temperature along a radar track from attenuation rates.
+
+    Uses root-finding to invert the attenuation-conductivity relationship and
+    recover temperature at each point along the track.
+
+    Args:
+        data_frame: Input data with columns ``atten_rate_C0``, ``x``, and ``y``.
+        mode: The inversion mode selecting which residual function to use.
+        to_wgs84: If True, reproject the result from EPSG:3031 to EPSG:4326.
+
+    Returns:
+        A GeoDataFrame with ``temperature`` and ``attenuation`` columns.
+
+    Raises:
+        ValueError: If ``atten_rate_C0`` is not in the data frame.
+    """
     if "atten_rate_C0" not in data_frame:
         raise ValueError("atten_rate_C0 not found in data_frame")
 
@@ -77,12 +96,33 @@ def compute_along_track(
 
 
 def conductivity_residual(value: float, sigma: float):
+    """Residual function for the conductivity-based temperature model.
+
+    Args:
+        value: Temperature guess in Kelvin.
+        sigma: Measured conductivity.
+    """
     raise NotImplementedError
 
 
 def chemistry_residual(value: float, sigma: float):
+    """Residual function for the chemistry-based temperature model.
+
+    Args:
+        value: Temperature guess in Kelvin.
+        sigma: Measured conductivity.
+    """
     raise NotImplementedError
 
 
 def pure_ice_residual(value: float, sigma: float):
+    """Residual function for the pure-ice Arrhenius temperature model.
+
+    Args:
+        value: Temperature guess in Kelvin.
+        sigma: Measured conductivity.
+
+    Returns:
+        The residual between modeled and measured conductivity.
+    """
     return (SIGMA_0 * numpy.exp((E_PURE / K) * (1 / T_REF - 1 / value))) - sigma

@@ -13,6 +13,11 @@ class Client:
     """A client for our data on source.coop."""
 
     def __init__(self, config: Config | None = None) -> None:
+        """Initializes the client with HTTP and S3 stores.
+
+        Args:
+            config: Optional configuration. Uses default Config if not provided.
+        """
         self.config = config or Config()
         self.http_store = HTTPStore.from_url(f"{HTTP_URL}/{self.config.dataset_prefix}")
         self.s3_store = S3Store.from_url(
@@ -22,12 +27,26 @@ class Client:
         )
 
     def get_borehole_locations_text(self) -> str:
+        """Fetches the borehole locations CSV as text.
+
+        Returns:
+            The raw CSV content as a UTF-8 string.
+        """
         result = self.http_store.get(
             f"{self.config.borehole_data_prefix}/BoreholeLocations.csv"
         )
         return bytes(result.bytes()).decode("utf-8")
 
     def get_borehole_data_urls(self) -> defaultdict[str, dict[str, str]]:
+        """Builds a mapping of borehole data URLs by variable and name.
+
+        Lists CSV files in the borehole data prefix and organizes them into a
+        nested dict keyed by variable (e.g. "temp", "imp") then borehole name.
+
+        Returns:
+            A defaultdict mapping variable names to dicts of
+            ``{borehole_name: url}``.
+        """
         urls = defaultdict(dict)
         for list_result in self.s3_store.list(prefix=self.config.borehole_data_prefix):
             for object_meta in list_result:

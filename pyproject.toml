@@ -25,6 +25,7 @@ livist = "livist.main:cli"
 
 [dependency-groups]
 dev = [
+    "mkdocstrings-python>=2.0.3",
     "pytest>=9.0.2",
     "respx>=0.22.0",
     "ruff>=0.15.5",
