@@ -1,14 +1,23 @@
 import numpy
-import pytest
 from pandas import DataFrame
 
 from livist import temperature
-from livist.temperature import Mode
+from livist.temperature import ChemistryParameters, Mode
 
 
-@pytest.mark.parametrize("mode,column", [(Mode.pure_ice, "pure_temperature_K")])
-def test_compute_along_track(sample_data: DataFrame, mode: Mode, column: str) -> None:
-    result = temperature.compute_along_track(sample_data, mode)
+def test_compute_along_track_pure_ice(sample_data: DataFrame) -> None:
+    result = temperature.compute_along_track(sample_data, Mode.pure_ice)
     numpy.testing.assert_allclose(
-        result["temperature"].to_numpy(), sample_data[column], rtol=1e-6
+        result["temperature"].to_numpy(), sample_data["pure_temperature_K"], rtol=1e-6
+    )
+
+
+def test_compute_along_track_chemistry(
+    sample_data: DataFrame, chemistry_parameters: ChemistryParameters
+) -> None:
+    result = temperature.compute_along_track(
+        sample_data, Mode.chemistry, chemistry_parameters=chemistry_parameters
+    )
+    numpy.testing.assert_allclose(
+        result["temperature"].to_numpy(), sample_data["chem_temperature_K"], rtol=1e-6
     )

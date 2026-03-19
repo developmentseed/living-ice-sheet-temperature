@@ -52,9 +52,9 @@ function projectFeature(feature: Feature): Feature {
   };
 }
 
-export function createTemperatureLayer(pmtilesSource: PMTiles) {
+export function createTemperatureLayer(pmtilesSource: PMTiles, id: string) {
   return new TileLayer({
-    id: "temperatures",
+    id,
     TilesetClass: AntarcticTileset2D,
     minZoom: 0,
     maxZoom: 10,

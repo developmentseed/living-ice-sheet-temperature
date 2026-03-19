@@ -7,7 +7,7 @@ from obstore.store import HTTPStore
 
 from .borehole import Borehole
 from .client import Client
-from .temperature import Mode, compute_along_track
+from .temperature import ChemistryParameters, Mode, compute_along_track
 
 
 @click.group()
@@ -30,8 +30,13 @@ def boreholes() -> None:
 @click.argument("OUTFILE")
 @click.option("--mode", type=click.Choice(Mode), default=Mode.pure_ice)
 @click.option("--to-wgs84", is_flag=True, default=False)
+@click.option("--borehole-url")
 def temperatures(
-    attenuation_href: str, outfile: str, mode: Mode, to_wgs84: bool
+    attenuation_href: str,
+    outfile: str,
+    mode: Mode,
+    to_wgs84: bool,
+    borehole_url: str | None,
 ) -> None:
     """Create along-track temperatures"""
     parts = attenuation_href.rsplit("/", 1)
@@ -45,7 +50,13 @@ def temperatures(
             text += chunk.decode("utf-8")
             progress.update(len(chunk))
     track = pandas.read_csv(StringIO(text))
-    result = compute_along_track(track, mode, to_wgs84)
+
+    if borehole_url:
+        chemistry_parameters = ChemistryParameters.from_borehole_href(borehole_url)
+    else:
+        chemistry_parameters = None
+
+    result = compute_along_track(track, mode, to_wgs84, chemistry_parameters)
     result.to_parquet(outfile)  # ty: ignore[invalid-argument-type]
 
 

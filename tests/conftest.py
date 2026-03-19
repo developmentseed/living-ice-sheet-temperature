@@ -1,8 +1,11 @@
 import json
 from pathlib import Path
 
+import pandas
 import pytest
 from pandas import DataFrame
+
+from livist.temperature import ChemistryParameters
 
 
 @pytest.fixture
@@ -36,5 +39,15 @@ def sample_data(sample_data_path: Path) -> DataFrame:
             "y": [p["y"] for p in points],
             "atten_rate_C0": [p["attenuation_rate"] for p in points],
             "pure_temperature_K": [p["pure"]["temperature_K"] for p in points],
+            "chem_temperature_K": [p["chem"]["temperature_K"] for p in points],
         }
+    )
+
+
+@pytest.fixture
+def chemistry_parameters(data_path: Path) -> ChemistryParameters:
+    data_frame = pandas.read_csv(data_path / "waisdivide_imp.csv")
+    return ChemistryParameters(
+        molar_hp=data_frame["acid [mol/L]"].mean().item(),
+        molar_sscl=data_frame["sscl [mol/L]"].mean().item(),
     )
