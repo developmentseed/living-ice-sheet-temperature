@@ -100,7 +100,8 @@ export default function Map() {
     [],
   );
 
-  const pmtiles = pmtilesSources[temperatureSource as keyof typeof pmtilesSources];
+  const pmtiles =
+    pmtilesSources[temperatureSource as keyof typeof pmtilesSources];
 
   const projectedBoreholes = useMemo(
     () => (boreholesResult.data ? projectPoints(boreholesResult.data) : null),
