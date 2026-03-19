@@ -4,6 +4,7 @@ import {
   Box,
   Checkbox,
   HStack,
+  RadioGroup,
   Spinner,
   Text,
   VStack,
@@ -84,14 +85,22 @@ export default function Map() {
   const boreholesResult = useBoreholes();
   const [showTemperatures, setShowTemperatures] = useState(true);
   const [showBoreholes, setShowBoreholes] = useState(true);
+  const [temperatureSource, setTemperatureSource] =
+    useState<string>("pure-ice");
 
-  const pmtiles = useMemo(
-    () =>
-      new PMTiles(
+  const pmtilesSources = useMemo(
+    () => ({
+      "pure-ice": new PMTiles(
         "https://data.source.coop/englacial/ice-sheet-temperature/temperature/temperature-pure-ice.pmtiles",
       ),
+      chemistry: new PMTiles(
+        "https://data.source.coop/englacial/ice-sheet-temperature/temperature/temperature-chemistry.pmtiles",
+      ),
+    }),
     [],
   );
+
+  const pmtiles = pmtilesSources[temperatureSource as keyof typeof pmtilesSources];
 
   const projectedBoreholes = useMemo(
     () => (boreholesResult.data ? projectPoints(boreholesResult.data) : null),
@@ -122,7 +131,8 @@ export default function Map() {
         getLineWidth: 2,
         lineWidthUnits: "pixels",
       }),
-    showTemperatures && createTemperatureLayer(pmtiles),
+    showTemperatures &&
+      createTemperatureLayer(pmtiles, `temperatures-${temperatureSource}`),
     showBoreholes &&
       projectedBoreholes &&
       new IconLayer({
@@ -170,6 +180,8 @@ export default function Map() {
       <Legend
         showTemperatures={showTemperatures}
         onToggleTemperatures={() => setShowTemperatures((v) => !v)}
+        temperatureSource={temperatureSource}
+        onTemperatureSourceChange={setTemperatureSource}
         showBoreholes={showBoreholes}
         onToggleBoreholes={() => setShowBoreholes((v) => !v)}
       />
@@ -180,11 +192,15 @@ export default function Map() {
 function Legend({
   showTemperatures,
   onToggleTemperatures,
+  temperatureSource,
+  onTemperatureSourceChange,
   showBoreholes,
   onToggleBoreholes,
 }: {
   showTemperatures: boolean;
   onToggleTemperatures: () => void;
+  temperatureSource: string;
+  onTemperatureSourceChange: (value: string) => void;
   showBoreholes: boolean;
   onToggleBoreholes: () => void;
 }) {
@@ -213,6 +229,25 @@ function Legend({
         <Checkbox.Control />
         <Checkbox.Label>Temperatures</Checkbox.Label>
       </Checkbox.Root>
+      <RadioGroup.Root
+        size="sm"
+        value={temperatureSource}
+        onValueChange={(e) => e.value && onTemperatureSourceChange(e.value)}
+        pl="6"
+      >
+        <VStack gap="1" alignItems="flex-start">
+          <RadioGroup.Item value="pure-ice">
+            <RadioGroup.ItemHiddenInput />
+            <RadioGroup.ItemIndicator />
+            <RadioGroup.ItemText>Pure ice</RadioGroup.ItemText>
+          </RadioGroup.Item>
+          <RadioGroup.Item value="chemistry">
+            <RadioGroup.ItemHiddenInput />
+            <RadioGroup.ItemIndicator />
+            <RadioGroup.ItemText>Chemistry</RadioGroup.ItemText>
+          </RadioGroup.Item>
+        </VStack>
+      </RadioGroup.Root>
       <Checkbox.Root
         size="sm"
         checked={showBoreholes}
