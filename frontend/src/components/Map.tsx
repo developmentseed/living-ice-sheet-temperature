@@ -15,7 +15,7 @@ import { DeckGL } from "@deck.gl/react";
 import { Feature, FeatureCollection, Point } from "geojson";
 import { PMTiles } from "pmtiles";
 import proj4 from "proj4";
-import { useBasemap, useBoreholes } from "../hooks/usePublic";
+import { useBasemap, useBasins, useBoreholes } from "../hooks/usePublic";
 import { createTemperatureLayer } from "../layers/temperatureLayer";
 
 const EPSG3031 =
@@ -80,6 +80,7 @@ const INITIAL_VIEW_STATE = {
 
 export default function Map() {
   const basemapResult = useBasemap();
+  const basinsResult = useBasins();
   const boreholesResult = useBoreholes();
   const [showTemperatures, setShowTemperatures] = useState(true);
   const [showBoreholes, setShowBoreholes] = useState(true);
@@ -109,6 +110,17 @@ export default function Map() {
           const category = feature.properties?.Category ?? "";
           return BASEMAP_CATEGORY_COLORS[category] ?? DEFAULT_BASEMAP_COLOR;
         },
+      }),
+    basinsResult.data &&
+      new GeoJsonLayer({
+        id: "basins",
+        data: basinsResult.data,
+        coordinateSystem: COORDINATE_SYSTEM.CARTESIAN,
+        stroked: true,
+        filled: false,
+        getLineColor: [255, 255, 255, 255],
+        getLineWidth: 2,
+        lineWidthUnits: "pixels",
       }),
     showTemperatures && createTemperatureLayer(pmtiles),
     showBoreholes &&

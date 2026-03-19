@@ -16,6 +16,13 @@ export function useBoreholes() {
   });
 }
 
+export function useBasins() {
+  return useQuery({
+    queryKey: ["basins"],
+    queryFn: () => fetchPublic<FeatureCollection>("basins.json"),
+  });
+}
+
 async function fetchPublic<T>(file_name: string): Promise<T> {
   return await fetch(import.meta.env.BASE_URL + file_name).then((response) =>
     response.json(),

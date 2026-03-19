@@ -1,9 +1,21 @@
-import { Box, Heading } from "@chakra-ui/react";
+import { LuThermometerSnowflake } from "react-icons/lu";
+import { Box, Button, HStack, Heading, Icon, Link } from "@chakra-ui/react";
 
 export default function Header() {
   return (
-    <Box as="header" padding="4" bg="blue.600" color="white">
-      <Heading size="lg">Living Ice Sheet Temperature</Heading>
-    </Box>
+    <HStack as="header" py="4" px="6" bg="blue.50" shadow="sm">
+      <Heading size="lg">
+        <HStack>
+          <Icon>
+            <LuThermometerSnowflake />
+          </Icon>
+          Living Ice Sheet Temperature
+        </HStack>
+      </Heading>
+      <Box flex="1" />
+      <Link href="./docs" asChild target="_blank">
+        <Button variant={"outline"}>Docs</Button>
+      </Link>
+    </HStack>
   );
 }
