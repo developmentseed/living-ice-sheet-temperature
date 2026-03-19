@@ -13,7 +13,7 @@ export default function Header() {
         </HStack>
       </Heading>
       <Box flex="1" />
-      <Link href="./docs" asChild target="_blank">
+      <Link href="docs/" asChild target="_blank">
         <Button variant={"outline"}>Docs</Button>
       </Link>
     </HStack>
