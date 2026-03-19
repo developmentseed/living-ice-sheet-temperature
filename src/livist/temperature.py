@@ -1,7 +1,7 @@
 # Copied, with modifications, from https://github.com/elizadawson/ice_attenuation_temperature/blob/c0efc77db4fd50e12396d9b0c9c6aed54f45aca9/src/atten_temp_functions.py
 
-
 from collections.abc import Callable
+from dataclasses import dataclass
 from enum import StrEnum
 
 import geopandas
@@ -19,6 +19,16 @@ EV = 1.602176634e-19
 SIGMA_0 = 6.6e-6
 E_PURE = 0.55 * 1.602176634e-19
 T_REF = 251.0
+MU_HP = 3.2
+E_HP = 0.20 * 1.602176634e-19
+MU_SSCL = 0.43
+E_SSCL = 0.19 * 1.602176634e-19
+
+
+@dataclass
+class ChemistryParameters:
+    molar_hp: float
+    molar_sscl: float
 
 
 class Mode(StrEnum):
@@ -28,19 +38,27 @@ class Mode(StrEnum):
     conductivity = "cond"
     pure_ice = "pure"
 
-    def residual_function(self) -> Callable[[float, float], float]:
+    def residual_function(
+        self, chemistry_parameters: ChemistryParameters | None
+    ) -> Callable[[float, float], float]:
         """Returns the residual function for this mode."""
         match self:
             case Mode.chemistry:
-                return chemistry_residual
+                if chemistry_parameters:
+                    return _chemistry_residual(chemistry_parameters)
+                else:
+                    raise ValueError("chemistry mode requires chemistry_parameters")
             case Mode.conductivity:
-                return conductivity_residual
+                return _conductivity_residual
             case Mode.pure_ice:
-                return pure_ice_residual
+                return _pure_ice_residual
 
 
 def compute_along_track(
-    data_frame: DataFrame, mode: Mode, to_wgs84: bool = False
+    data_frame: DataFrame,
+    mode: Mode,
+    to_wgs84: bool = False,
+    chemistry_parameters: ChemistryParameters | None = None,
 ) -> GeoDataFrame:
     """Computes temperature along a radar track from attenuation rates.
 
@@ -70,7 +88,7 @@ def compute_along_track(
         / (1000 * (10 * numpy.log10(numpy.exp(1))))
     )
     temperature = numpy.full_like(sigma, numpy.nan, dtype=float)
-    residual_function = mode.residual_function()
+    residual_function = mode.residual_function(chemistry_parameters)
     for i in tqdm.tqdm(range(sigma.size), desc="Computing temperature"):
         try:
             temperature[i] = scipy.optimize.root_scalar(
@@ -95,34 +113,32 @@ def compute_along_track(
         return geo_data_frame
 
 
-def conductivity_residual(value: float, sigma: float):
-    """Residual function for the conductivity-based temperature model.
-
-    Args:
-        value: Temperature guess in Kelvin.
-        sigma: Measured conductivity.
-    """
+def _conductivity_residual(value: float, sigma: float) -> float:
     raise NotImplementedError
 
 
-def chemistry_residual(value: float, sigma: float):
-    """Residual function for the chemistry-based temperature model.
+def _chemistry_residual(
+    chemistry_parameters: ChemistryParameters,
+) -> Callable[[float, float], float]:
+    def chemistry_residual_inner(value: float, sigma: float) -> float:
+        hp = (
+            MU_HP
+            * chemistry_parameters.molar_hp
+            * numpy.exp((E_HP / K) * (1 / T_REF - 1 / value))
+        )
+        sscl = (
+            MU_SSCL
+            * chemistry_parameters.molar_sscl
+            * numpy.exp((E_SSCL / K) * (1 / T_REF - 1 / value))
+        )
+        return _pure_ice_conductivity(value) + hp + sscl - sigma
 
-    Args:
-        value: Temperature guess in Kelvin.
-        sigma: Measured conductivity.
-    """
-    raise NotImplementedError
+    return chemistry_residual_inner
 
 
-def pure_ice_residual(value: float, sigma: float):
-    """Residual function for the pure-ice Arrhenius temperature model.
+def _pure_ice_residual(value: float, sigma: float) -> float:
+    return _pure_ice_conductivity(value) - sigma
 
-    Args:
-        value: Temperature guess in Kelvin.
-        sigma: Measured conductivity.
 
-    Returns:
-        The residual between modeled and measured conductivity.
-    """
-    return (SIGMA_0 * numpy.exp((E_PURE / K) * (1 / T_REF - 1 / value))) - sigma
+def _pure_ice_conductivity(value: float) -> float:
+    return SIGMA_0 * numpy.exp((E_PURE / K) * (1 / T_REF - 1 / value))
