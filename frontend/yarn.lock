@@ -891,7 +891,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@luma.gl/core@npm:^9.2.6, @luma.gl/core@npm:~9.2.6":
+"@luma.gl/core@npm:~9.2.6":
   version: 9.2.6
   resolution: "@luma.gl/core@npm:9.2.6"
   dependencies:
@@ -904,7 +904,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@luma.gl/engine@npm:^9.2.6, @luma.gl/engine@npm:~9.2.6":
+"@luma.gl/engine@npm:~9.2.6":
   version: 9.2.6
   resolution: "@luma.gl/engine@npm:9.2.6"
   dependencies:
@@ -936,7 +936,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@luma.gl/shadertools@npm:^9.2.6, @luma.gl/shadertools@npm:~9.2.6":
+"@luma.gl/shadertools@npm:~9.2.6":
   version: 9.2.6
   resolution: "@luma.gl/shadertools@npm:9.2.6"
   dependencies:
@@ -3139,9 +3139,9 @@ __metadata:
     "@emotion/react": "npm:^11"
     "@loaders.gl/core": "npm:^4.3.4"
     "@loaders.gl/mvt": "npm:^4.3.4"
-    "@luma.gl/core": "npm:^9.2.6"
-    "@luma.gl/engine": "npm:^9.2.6"
-    "@luma.gl/shadertools": "npm:^9.2.6"
+    "@luma.gl/core": "npm:~9.2.6"
+    "@luma.gl/engine": "npm:~9.2.6"
+    "@luma.gl/shadertools": "npm:~9.2.6"
     "@mapbox/tilebelt": "npm:^2.0.3"
     "@tanstack/react-query": "npm:^5.90.21"
     "@trivago/prettier-plugin-sort-imports": "npm:^6.0.2"
