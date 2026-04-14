@@ -56,7 +56,7 @@ export function createTemperatureLayer(pmtilesSource: PMTiles, id: string) {
   return new TileLayer({
     id,
     TilesetClass: AntarcticTileset2D,
-    minZoom: 0,
+    minZoom: null,
     maxZoom: 10,
     pickable: true,
     autoHighlight: true,
