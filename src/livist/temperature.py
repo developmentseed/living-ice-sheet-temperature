@@ -72,7 +72,6 @@ class Mode(StrEnum):
 def compute_along_track(
     data_frame: DataFrame,
     mode: Mode,
-    to_wgs84: bool = False,
     chemistry_parameters: ChemistryParameters | None = None,
 ) -> GeoDataFrame:
     """Computes temperature along a radar track from attenuation rates.
@@ -83,7 +82,6 @@ def compute_along_track(
     Args:
         data_frame: Input data with columns ``atten_rate_C0``, ``x``, and ``y``.
         mode: The inversion mode selecting which residual function to use.
-        to_wgs84: If True, reproject the result from EPSG:3031 to EPSG:4326.
 
     Returns:
         A GeoDataFrame with ``temperature`` and ``attenuation`` columns.
@@ -117,15 +115,11 @@ def compute_along_track(
             temperature[i] = scipy.optimize.fsolve(
                 residual_function, 250, args=(sigma[i],)
             )[0]
-    geo_data_frame = GeoDataFrame(
+    return GeoDataFrame(
         data={"temperature": temperature, "attenuation": attenuation},
         geometry=geopandas.points_from_xy(data_frame["x"], data_frame["y"]),
         crs="EPSG:3031",
     )
-    if to_wgs84:
-        return geo_data_frame.to_crs("EPSG:4326")
-    else:
-        return geo_data_frame
 
 
 def _conductivity_residual(value: float, sigma: float) -> float:
