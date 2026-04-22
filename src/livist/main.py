@@ -56,7 +56,9 @@ def temperatures(
     else:
         chemistry_parameters = None
 
-    result = compute_along_track(track, mode, to_wgs84, chemistry_parameters)
+    result = compute_along_track(track, mode, chemistry_parameters)
+    if to_wgs84:
+        result = result.to_crs("EPSG:4326")
     result.to_parquet(outfile)  # ty: ignore[invalid-argument-type]
 
 
