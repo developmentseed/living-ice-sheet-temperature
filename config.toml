@@ -1,0 +1,4 @@
+borehole_path = "englacial/ice-sheet-temperature/AntarcticaBoreholeData/BoreholeLocations.csv"
+
+[attenuation_paths]
+ase = "englacial/ice-sheet-temperature/AttenuationRateData/depth-avg-attenuation-ASE.txt"

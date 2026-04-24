@@ -1,13 +1,10 @@
 from __future__ import annotations
 
-import csv
 from typing import Annotated, Any, Literal
 
 from geojson_pydantic import Feature, FeatureCollection, Point
 from geojson_pydantic.types import Position2D
 from pydantic import BaseModel, BeforeValidator, model_validator
-
-from .client import Client
 
 
 def parse_bool(value: Any) -> bool:
@@ -95,55 +92,6 @@ class Borehole(BaseModel):
                             f"Too many parts in years_drilled: {years_drilled}"
                         )
         return data
-
-    @classmethod
-    def from_csv(cls, text: str, client: Client | None = None) -> list[Borehole]:
-        """Parses borehole locations from CSV text and attaches data URLs.
-
-        Args:
-            text: Raw CSV content with borehole location data.
-            client: Optional client for fetching data URLs. Creates a default
-                client if not provided.
-
-        Returns:
-            A list of Borehole instances with data URLs populated.
-        """
-        boreholes = []
-        fieldnames = [
-            "name",
-            "location",
-            "region",
-            "years_drilled",
-            "type",
-            "lat",
-            "lon",
-            "ice_thickness",
-            "drilled_depth",
-            "has_temperature",
-            "has_chemistry",
-            "has_conductivity",
-            "has_grain_size",
-            "original_publication",
-        ]
-        reader = csv.DictReader(text.splitlines(), fieldnames=fieldnames)
-
-        next(reader)  # discard headers
-
-        data_urls = (client or Client()).get_borehole_data_urls()
-        for row in reader:
-            if row["name"]:
-                borehole = Borehole.model_validate(row)
-                borehole.temperature_data_url = data_urls["temp"].get(
-                    borehole.name.lower()
-                )
-                borehole.chemistry_data_url = data_urls["imp"].get(
-                    borehole.name.lower()
-                )
-                borehole.grainsize_data_url = data_urls["grainsize"].get(
-                    borehole.name.lower()
-                )
-                boreholes.append(borehole)
-        return boreholes
 
     @classmethod
     def to_feature_collection(cls, boreholes: list[Borehole]) -> FeatureCollection:

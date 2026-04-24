@@ -1,12 +1,17 @@
+import csv
 import urllib.parse
 from collections import defaultdict
+from io import StringIO
+from pathlib import Path
 
-from obstore.store import HTTPStore, S3Store
+import pandas
+import tqdm
+from pandas import DataFrame
 
+from . import temperature
+from .borehole import Borehole
 from .config import Config
-
-HTTP_URL = "https://data.source.coop"
-S3_URL = "s3://us-west-2.opendata.source.coop"
+from .temperature import Chemistry, Mode
 
 
 class Client:
@@ -18,24 +23,9 @@ class Client:
         Args:
             config: Optional configuration. Uses default Config if not provided.
         """
-        self.config = config or Config()
-        self.http_store = HTTPStore.from_url(f"{HTTP_URL}/{self.config.dataset_prefix}")
-        self.s3_store = S3Store.from_url(
-            f"{S3_URL}/{self.config.dataset_prefix}",
-            default_region="us-west-2",
-            skip_signature=True,
-        )
-
-    def get_borehole_locations_text(self) -> str:
-        """Fetches the borehole locations CSV as text.
-
-        Returns:
-            The raw CSV content as a UTF-8 string.
-        """
-        result = self.http_store.get(
-            f"{self.config.borehole_data_prefix}/BoreholeLocations.csv"
-        )
-        return bytes(result.bytes()).decode("utf-8")
+        self.config = config or Config()  # pyright: ignore[reportCallIssue]
+        self.http_store = self.config.source_coop.http_store()
+        self.s3_store = self.config.source_coop.s3_store()
 
     def get_borehole_data_urls(self) -> defaultdict[str, dict[str, str]]:
         """Builds a mapping of borehole data URLs by variable and name.
@@ -48,7 +38,9 @@ class Client:
             ``{borehole_name: url}``.
         """
         urls = defaultdict(dict)
-        for list_result in self.s3_store.list(prefix=self.config.borehole_data_prefix):
+        for list_result in self.s3_store.list(
+            prefix=str(Path(self.config.borehole_path).parent)
+        ):
             for object_meta in list_result:
                 path = object_meta["path"]
                 if not path.endswith(".csv"):
@@ -65,3 +57,87 @@ class Client:
                     self.http_store.url + "/", path
                 )
         return urls
+
+    def get_boreholes(self) -> list[Borehole]:
+        """Parses borehole locations from CSV text and attaches data URLs.
+
+        Args:
+            text: Raw CSV content with borehole location data.
+            client: Optional client for fetching data URLs. Creates a default
+                client if not provided.
+
+        Returns:
+            A list of Borehole instances with data URLs populated.
+        """
+        boreholes = []
+        fieldnames = [
+            "name",
+            "location",
+            "region",
+            "years_drilled",
+            "type",
+            "lat",
+            "lon",
+            "ice_thickness",
+            "drilled_depth",
+            "has_temperature",
+            "has_chemistry",
+            "has_conductivity",
+            "has_grain_size",
+            "original_publication",
+        ]
+        result = self.http_store.get(self.config.borehole_path)
+        text = bytes(result.bytes()).decode("utf-8")
+        reader = csv.DictReader(text.splitlines(), fieldnames=fieldnames)
+
+        next(reader)  # discard headers
+
+        data_urls = self.get_borehole_data_urls()
+        for row in reader:
+            if row["name"]:
+                borehole = Borehole.model_validate(row)
+                borehole.temperature_data_url = data_urls["temp"].get(
+                    borehole.name.lower()
+                )
+                borehole.chemistry_data_url = data_urls["imp"].get(
+                    borehole.name.lower()
+                )
+                borehole.grainsize_data_url = data_urls["grainsize"].get(
+                    borehole.name.lower()
+                )
+                boreholes.append(borehole)
+        return boreholes
+
+    def compute_along_track(self, attenuation_name: str, mode: Mode) -> DataFrame:
+        data_frame = self.get_attenuation(attenuation_name)
+        if mode == Mode.chemistry:
+            chemistry = self.get_chemistry()
+        else:
+            chemistry = None
+
+        return temperature.compute_along_track(data_frame, chemistry)
+
+    def get_attenuation(self, attenuation_name: str) -> DataFrame:
+        try:
+            path = self.config.attenuation_paths[attenuation_name]
+        except KeyError:
+            raise ValueError(
+                f"Unknown attenuation name: {attenuation_name}. "
+                "Valid values are: "
+                ", ".join(list(self.config.attenuation_paths.keys()))
+            )
+        result = self.http_store.get(path)
+        text = ""
+        with tqdm.tqdm(
+            total=result.meta["size"],
+            desc="Fetching attenuation data",
+            unit="B",
+            unit_scale=True,
+        ) as progress:
+            for chunk in result:
+                text += chunk.decode("utf-8")
+                progress.update(len(chunk))
+        return pandas.read_csv(StringIO(text))
+
+    def get_chemistry(self) -> list[Chemistry]:
+        raise NotImplementedError
