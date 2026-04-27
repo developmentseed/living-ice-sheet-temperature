@@ -49,7 +49,9 @@ def temperature(
             data_frame = client.compute_along_track(name, m)
             if to_wgs84:
                 data_frame = data_frame.to_crs("EPSG:4326")
-            client.write_temperature_file(name, m, data_frame)
+            client.write_temperature_file(
+                name, m, data_frame, suffix="-wgs84" if to_wgs84 else None
+            )
 
 
 if __name__ == "__main__":

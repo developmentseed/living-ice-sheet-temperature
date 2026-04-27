@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+
+set -e
+
+uv run livist temperature
+uv run livist temperature --to-wgs84

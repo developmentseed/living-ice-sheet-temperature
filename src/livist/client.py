@@ -200,7 +200,13 @@ class Client:
         return ChemistryKriging(molar, sscl)
 
     def write_temperature_file(
-        self, attenuation_name: str, mode: Mode, data_frame: DataFrame
+        self,
+        attenuation_name: str,
+        mode: Mode,
+        data_frame: DataFrame,
+        suffix: str | None = None,
     ) -> None:
-        outfile = self.config.get_temperature_file_name(attenuation_name, mode)
+        outfile = self.config.get_temperature_file_name(
+            attenuation_name, mode, suffix or ""
+        )
         data_frame.to_parquet(outfile)

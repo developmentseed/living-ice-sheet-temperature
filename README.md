@@ -13,22 +13,28 @@ Resources:
 ## Processing data
 
 You'll need [GDAL](https://gdal.org/en/stable/download.html#binaries) and [tippecanoe](https://github.com/felt/tippecanoe?tab=readme-ov-file#installation).
-We use a simple [Makefile](./Makefile) to (re)generate data.
+To generate everything:
 
 ```sh
-make
+scripts/generate
 ```
 
-To force regeneration of all data:
+## Uploading data
+
+To upload, you first need the [AWS CLI](https://aws.amazon.com/cli/) and credentials from source.coop.
+Go to https://source.coop/englacial/ice-sheet-temperature and click on the lock:
+
+![Edit mode](./img/edit-mode.png)
+
+This will give you the option to "View credentials":
+
+![View credentials](./img/view-credentials.png)
+
+Choose "Environment Variables" and then copy those `export` commands into your shell.
+Then:
 
 ```sh
-make -B
-```
-
-If your default GDAL install doesn't have parquet reader support, you can customize the GDAL location:
-
-```sh
-GDAL=/path/to/parquet/enabed/gdal make
+scripts/upload
 ```
 
 ## Developing

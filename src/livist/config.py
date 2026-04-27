@@ -48,5 +48,10 @@ class Config(BaseSettings):
     ) -> tuple[PydanticBaseSettingsSource, ...]:
         return (TomlConfigSettingsSource(settings_cls),)
 
-    def get_temperature_file_name(self, attenuation_name: str, mode: str) -> Path:
-        return self.data_directory / f"temperature-{attenuation_name}-{mode}.parquet"
+    def get_temperature_file_name(
+        self, attenuation_name: str, mode: str, suffix: str = ""
+    ) -> Path:
+        return (
+            self.data_directory
+            / f"temperature-{attenuation_name}-{mode}{suffix}.parquet"
+        )

@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+
+set -e
+
+aws s3 sync data/ s3://us-west-2.opendata.source.coop/englacial/ice-sheet-temperature/temperature --exclude '*' --include '*.parquet'
+aws s3 sync data/ s3://us-west-2.opendata.source.coop/englacial/ice-sheet-temperature/temperature --exclude '*' --include '*.pmtiles'
