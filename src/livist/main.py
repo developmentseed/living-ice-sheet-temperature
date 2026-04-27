@@ -3,12 +3,19 @@ from click import Choice
 
 from .borehole import Borehole
 from .client import Client
+from .config import Config
 from .temperature import Mode
 
 
 @click.group()
 def cli() -> None:
     """Data processing for the Living Ice Sheet Temperature (livist) project."""
+
+
+@cli.command()
+def config() -> None:
+    """Print the current configuration"""
+    click.echo(Config().model_dump_json(indent=2))  # ty: ignore[missing-argument]
 
 
 @cli.command()
