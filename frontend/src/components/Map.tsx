@@ -34,7 +34,7 @@ type Rgba = [number, number, number, number];
 
 const BOREHOLE_COLORS = {
   temperature: { hex: "#3182ce", rgb: [49, 130, 206] as Rgb },
-  temperatureChemistry: { hex: "#38a169", rgb: [56, 161, 105] as Rgb },
+  temperatureConductivity: { hex: "#38a169", rgb: [56, 161, 105] as Rgb },
   temperatureGrainSize: { hex: "#d69e2e", rgb: [214, 158, 46] as Rgb },
   all: { hex: "#e53e3e", rgb: [229, 62, 62] as Rgb },
 };
@@ -57,8 +57,8 @@ function createTriangleIcon(fill: Rgb): {
 
 const BOREHOLE_ICONS = {
   temperature: createTriangleIcon(BOREHOLE_COLORS.temperature.rgb),
-  temperatureChemistry: createTriangleIcon(
-    BOREHOLE_COLORS.temperatureChemistry.rgb,
+  temperatureConductivity: createTriangleIcon(
+    BOREHOLE_COLORS.temperatureConductivity.rgb,
   ),
   temperatureGrainSize: createTriangleIcon(
     BOREHOLE_COLORS.temperatureGrainSize.rgb,
@@ -258,10 +258,10 @@ function Legend({
             <RadioGroup.ItemIndicator />
             <RadioGroup.ItemText>Pure ice</RadioGroup.ItemText>
           </RadioGroup.Item>
-          <RadioGroup.Item value="chemistry">
+          <RadioGroup.Item value="conductivity">
             <RadioGroup.ItemHiddenInput />
             <RadioGroup.ItemIndicator />
-            <RadioGroup.ItemText>Chemistry</RadioGroup.ItemText>
+            <RadioGroup.ItemText>Conductivity</RadioGroup.ItemText>
           </RadioGroup.Item>
         </VStack>
       </RadioGroup.Root>
@@ -280,8 +280,8 @@ function Legend({
           label="Temperature"
         />
         <LegendItem
-          color={BOREHOLE_COLORS.temperatureChemistry.hex}
-          label="Temperature + chemistry"
+          color={BOREHOLE_COLORS.temperatureConductivity.hex}
+          label="Temperature + conductivity"
         />
         <LegendItem
           color={BOREHOLE_COLORS.temperatureGrainSize.hex}
@@ -319,9 +319,9 @@ function projectPoints(data: FeatureCollection): FeatureCollection {
 }
 
 function boreholeIcon(feature: Feature) {
-  const { has_chemistry, has_grain_size } = feature.properties ?? {};
-  if (has_chemistry && has_grain_size) return BOREHOLE_ICONS.all;
-  if (has_chemistry) return BOREHOLE_ICONS.temperatureChemistry;
+  const { has_conductivity, has_grain_size } = feature.properties ?? {};
+  if (has_conductivity && has_grain_size) return BOREHOLE_ICONS.all;
+  if (has_conductivity) return BOREHOLE_ICONS.temperatureConductivity;
   if (has_grain_size) return BOREHOLE_ICONS.temperatureGrainSize;
   return BOREHOLE_ICONS.temperature;
 }
