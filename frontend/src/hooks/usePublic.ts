@@ -23,6 +23,16 @@ export function useBasins() {
   });
 }
 
+export type TemperatureSource = { name: string; url: string };
+export type TemperatureSources = Record<string, TemperatureSource[]>;
+
+export function useTemperatureSources() {
+  return useQuery({
+    queryKey: ["temperature-sources"],
+    queryFn: () => fetchPublic<TemperatureSources>("temperature-sources.json"),
+  });
+}
+
 async function fetchPublic<T>(file_name: string): Promise<T> {
   return await fetch(import.meta.env.BASE_URL + file_name).then((response) =>
     response.json(),

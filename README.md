@@ -10,7 +10,8 @@ Resources:
 - [Source data on source.coop](https://source.coop/englacial/ice-sheet-temperature)
 - [Python package documentation](https://elizadawson.github.io/living-ice-sheet-temperature/docs/)
 
-## Processing data
+
+## Generating data
 
 You'll need [GDAL with Parquet support](https://gdal.org/en/stable/drivers/vector/parquet.html#conda-forge-package) and [tippecanoe](https://github.com/felt/tippecanoe?tab=readme-ov-file#installation).
 To generate everything:
@@ -44,6 +45,11 @@ Then:
 ```sh
 scripts/upload
 ```
+
+## Adding data
+
+To add a new source of attenuation data, edit [config.toml](./config.toml) and add a new entry to the `[attenuation_paths]` section.
+Then, [generate](#generating-data) and [upload](#uploading-data) the new data.
 
 ## Developing
 

@@ -1,3 +1,5 @@
+import json
+
 import click
 from click import Choice
 
@@ -25,6 +27,26 @@ def boreholes() -> None:
     boreholes = client.get_boreholes()
     features = Borehole.to_feature_collection(boreholes)
     click.echo(features.model_dump_json(indent=2))
+
+
+@cli.command("temperature-sources")
+def temperature_sources() -> None:
+    """Print pmtiles URLs per mode as JSON for the frontend manifest."""
+    config = Config()  # ty: ignore[missing-argument]
+    base_url = (
+        f"{config.source_coop.http_url}/englacial/ice-sheet-temperature/temperature/"
+    )
+    sources = {
+        mode.value: [
+            {
+                "name": name,
+                "url": f"{base_url}temperature-{name}-{mode.value}.pmtiles",
+            }
+            for name in config.attenuation_paths
+        ]
+        for mode in Mode
+    }
+    click.echo(json.dumps(sources, indent=2))
 
 
 @cli.command()

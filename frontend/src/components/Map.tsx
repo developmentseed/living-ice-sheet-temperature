@@ -16,7 +16,12 @@ import { DeckGL } from "@deck.gl/react";
 import { Feature, FeatureCollection, Point } from "geojson";
 import { PMTiles } from "pmtiles";
 import proj4 from "proj4";
-import { useBasemap, useBasins, useBoreholes } from "../hooks/usePublic";
+import {
+  useBasemap,
+  useBasins,
+  useBoreholes,
+  useTemperatureSources,
+} from "../hooks/usePublic";
 import { createTemperatureLayer } from "../layers/temperatureLayer";
 
 const EPSG3031 =
@@ -83,25 +88,25 @@ export default function Map() {
   const basemapResult = useBasemap();
   const basinsResult = useBasins();
   const boreholesResult = useBoreholes();
+  const temperatureSourcesResult = useTemperatureSources();
   const [showTemperatures, setShowTemperatures] = useState(true);
   const [showBoreholes, setShowBoreholes] = useState(true);
   const [temperatureSource, setTemperatureSource] =
     useState<string>("pure-ice");
 
-  const pmtilesSources = useMemo(
-    () => ({
-      "pure-ice": new PMTiles(
-        "https://data.source.coop/englacial/ice-sheet-temperature/temperature/temperature-pure-ice.pmtiles",
-      ),
-      chemistry: new PMTiles(
-        "https://data.source.coop/englacial/ice-sheet-temperature/temperature/temperature-chemistry.pmtiles",
-      ),
-    }),
-    [],
-  );
+  const pmtilesByUrl = useMemo(() => {
+    const byUrl: Record<string, PMTiles> = {};
+    if (!temperatureSourcesResult.data) return byUrl;
+    for (const sources of Object.values(temperatureSourcesResult.data)) {
+      for (const { url } of sources) {
+        if (!(url in byUrl)) byUrl[url] = new PMTiles(url);
+      }
+    }
+    return byUrl;
+  }, [temperatureSourcesResult.data]);
 
-  const pmtiles =
-    pmtilesSources[temperatureSource as keyof typeof pmtilesSources];
+  const activeSources =
+    temperatureSourcesResult.data?.[temperatureSource] ?? [];
 
   const projectedBoreholes = useMemo(
     () => (boreholesResult.data ? projectPoints(boreholesResult.data) : null),
@@ -132,8 +137,19 @@ export default function Map() {
         getLineWidth: 2,
         lineWidthUnits: "pixels",
       }),
-    showTemperatures &&
-      createTemperatureLayer(pmtiles, `temperatures-${temperatureSource}`),
+    ...(showTemperatures
+      ? activeSources.flatMap((source) => {
+          const pmtiles = pmtilesByUrl[source.url];
+          return pmtiles
+            ? [
+                createTemperatureLayer(
+                  pmtiles,
+                  `temperatures-${source.name}-${temperatureSource}`,
+                ),
+              ]
+            : [];
+        })
+      : []),
     showBoreholes &&
       projectedBoreholes &&
       new IconLayer({
