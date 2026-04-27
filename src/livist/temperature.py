@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 from collections.abc import Callable
-from dataclasses import dataclass
 from enum import StrEnum
 
 import geopandas
@@ -19,6 +18,7 @@ EPS_R = 3.17
 EV = 1.602176634e-19
 SIGMA_0 = 6.6e-6
 E_PURE = 0.55 * 1.602176634e-19
+E_COND = 0.22 * 1.602176634e-19
 T_REF = 251.0
 MU_HP = 3.2
 E_HP = 0.20 * 1.602176634e-19
@@ -29,19 +29,13 @@ E_SSCL = 0.19 * 1.602176634e-19
 class Mode(StrEnum):
     """Temperature inversion mode, determining which residual function to use."""
 
-    chemistry = "chemistry"
+    conductivity = "conductivity"
     pure_ice = "pure-ice"
-
-
-@dataclass
-class Chemistry:
-    molar_hp: float
-    molar_sscl: float
 
 
 def compute_along_track(
     data_frame: DataFrame,
-    chemistry: list[Chemistry] | None,
+    conductivity: list[float] | None,
 ) -> GeoDataFrame:
     """Computes temperature along a radar track from attenuation rates.
 
@@ -50,7 +44,8 @@ def compute_along_track(
 
     Args:
         data_frame: Input data with columns `atten_rate_C0`, `x`, and `y`.
-        mode: The inversion mode selecting which residual function to use.
+        conductivity: The conductivity values to use for calculation. If not
+            provided, the pure-ice math will be used.
 
     Returns:
         A GeoDataFrame with `temperature` and `attenuation` columns.
@@ -71,8 +66,8 @@ def compute_along_track(
     )
     temperature = numpy.full_like(sigma, numpy.nan, dtype=float)
     for i in tqdm.tqdm(range(sigma.size), desc="Computing temperature"):
-        if chemistry:
-            residual_function = _chemistry_residual(chemistry[i])
+        if conductivity:
+            residual_function = _conductivity_residual(conductivity[i])
         else:
             residual_function = _pure_ice_residual
         try:
@@ -94,26 +89,14 @@ def compute_along_track(
     )
 
 
-def _chemistry_residual(
-    chemistry: Chemistry,
+def _conductivity_residual(
+    conductivity: float,
 ) -> Callable[[float, float], float]:
-    def chemistry_residual_inner(value: float, sigma: float) -> float:
-        hp = (
-            MU_HP * chemistry.molar_hp * numpy.exp((E_HP / K) * (1 / T_REF - 1 / value))
-        )
-        sscl = (
-            MU_SSCL
-            * chemistry.molar_sscl
-            * numpy.exp((E_SSCL / K) * (1 / T_REF - 1 / value))
-        )
-        return _pure_ice_conductivity(value) + hp + sscl - sigma
+    def inner(value: float, sigma: float) -> float:
+        return conductivity * numpy.exp((E_COND / K) * (1 / T_REF - 1 / value)) - sigma
 
-    return chemistry_residual_inner
+    return inner
 
 
 def _pure_ice_residual(value: float, sigma: float) -> float:
-    return _pure_ice_conductivity(value) - sigma
-
-
-def _pure_ice_conductivity(value: float) -> float:
-    return SIGMA_0 * numpy.exp((E_PURE / K) * (1 / T_REF - 1 / value))
+    return SIGMA_0 * numpy.exp((E_PURE / K) * (1 / T_REF - 1 / value)) - sigma

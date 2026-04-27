@@ -1,7 +1,6 @@
 import csv
 import urllib.parse
 from collections import defaultdict
-from dataclasses import dataclass
 from io import StringIO
 from pathlib import Path
 
@@ -15,13 +14,7 @@ from pyproj import Transformer
 from . import temperature
 from .borehole import Borehole
 from .config import Config
-from .temperature import Chemistry, Mode
-
-
-@dataclass
-class ChemistryKriging:
-    molar: OrdinaryKriging
-    sscl: OrdinaryKriging
+from .temperature import Mode
 
 
 class Client:
@@ -120,14 +113,14 @@ class Client:
 
     def compute_along_track(self, attenuation_name: str, mode: Mode) -> DataFrame:
         data_frame = self.get_attenuation(attenuation_name)
-        if mode == Mode.chemistry:
-            chemistry = self.get_chemistry(
+        if mode == Mode.conductivity:
+            conductivity = self.get_conductivity(
                 data_frame["x"].tolist(), data_frame["y"].tolist()
             )
         else:
-            chemistry = None
+            conductivity = None
 
-        return temperature.compute_along_track(data_frame, chemistry)
+        return temperature.compute_along_track(data_frame, conductivity)
 
     def get_attenuation(self, attenuation_name: str) -> DataFrame:
         try:
@@ -156,22 +149,17 @@ class Client:
                     progress.update(len(chunk))
         return pandas.read_csv(local_path)
 
-    def get_chemistry(self, x: list[float], y: list[float]) -> list[Chemistry]:
-        chemistry_kriging = self.get_chemistry_kriging()
-        molar_values, _ = chemistry_kriging.molar.execute("points", x, y)
-        sscl_values, _ = chemistry_kriging.sscl.execute("points", x, y)
-        return [
-            Chemistry(molar_hp=a, molar_sscl=b)
-            for a, b in zip(molar_values, sscl_values)
-        ]
+    def get_conductivity(self, x: list[float], y: list[float]) -> list[float]:
+        kriging = self.get_conductivity_kriging()
+        values, _ = kriging.execute("points", x, y)
+        return values.tolist()
 
-    def get_chemistry_kriging(self) -> ChemistryKriging:
+    def get_conductivity_kriging(self) -> OrdinaryKriging:
         transformer = Transformer.from_crs("EPSG:4326", "EPSG:3031")
         boreholes = self.get_boreholes()
         borehole_x = list()
         borehole_y = list()
-        molar_hp = list()
-        molar_sscl = list()
+        conductivity = list()
         for borehole in boreholes:
             if borehole.chemistry_data_url:
                 result = self.http_store.get(
@@ -179,25 +167,20 @@ class Client:
                 )
                 text = bytes(result.bytes()).decode("utf-8")
                 data_frame = pandas.read_csv(StringIO(text))
-                if "acid [mol/L]" in data_frame and "sscl [mol/L]" in data_frame:
+                if "conductivity_inf [S/m]" in data_frame:
                     proj_x, proj_y = transformer.transform(borehole.lat, borehole.lon)
                     borehole_x.append(proj_x)
                     borehole_y.append(proj_y)
-                    hp = data_frame[["depth [m]", "acid [mol/L]"]].dropna()
-                    sscl = data_frame[["depth [m]", "sscl [mol/L]"]].dropna()
-                    hp_depth = numpy.asarray(hp["depth [m]"])
-                    sscl_depth = numpy.asarray(sscl["depth [m]"])
-                    molar_hp.append(
-                        numpy.trapezoid(numpy.asarray(hp["acid [mol/L]"]), hp_depth)
-                        / (hp_depth[-1] - hp_depth[0])
+                    rows = data_frame[["depth [m]", "conductivity_inf [S/m]"]].dropna()
+                    depth = numpy.asarray(rows["depth [m]"])
+                    conductivity.append(
+                        numpy.trapezoid(
+                            numpy.asarray(rows["conductivity_inf [S/m]"]),
+                            depth,
+                        )
+                        / (depth[-1] - depth[0])
                     )
-                    molar_sscl.append(
-                        numpy.trapezoid(numpy.asarray(sscl["sscl [mol/L]"]), sscl_depth)
-                        / (sscl_depth[-1] - sscl_depth[0])
-                    )
-        molar = OrdinaryKriging(borehole_x, borehole_y, molar_hp)
-        sscl = OrdinaryKriging(borehole_x, borehole_y, molar_sscl)
-        return ChemistryKriging(molar, sscl)
+        return OrdinaryKriging(borehole_x, borehole_y, conductivity)
 
     def write_temperature_file(
         self,
