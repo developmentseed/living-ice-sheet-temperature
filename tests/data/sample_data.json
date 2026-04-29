@@ -1,7 +1,7 @@
 {
   "borehole": {
-    "mean_acid_mol_per_L": 7.768181263449566e-07,
-    "mean_sscl_mol_per_L": 6.755579883630141e-07
+    "mean_acid_mol_per_L": 7.768181263449566e-7,
+    "mean_sscl_mol_per_L": 6.755579883630141e-7
   },
   "points": [
     {

@@ -2,8 +2,10 @@ from __future__ import annotations
 
 from typing import Annotated, Any, Literal
 
+import numpy
 from geojson_pydantic import Feature, FeatureCollection, Point
 from geojson_pydantic.types import Position2D
+from pandas import DataFrame
 from pydantic import BaseModel, BeforeValidator, model_validator
 
 
@@ -127,3 +129,15 @@ class Borehole(BaseModel):
             A GeoJSON Point at the borehole's longitude and latitude.
         """
         return Point(type="Point", coordinates=Position2D(self.lon, self.lat))
+
+
+def get_borehole_conductivity(data_frame: DataFrame) -> float:
+    depth = numpy.asarray(data_frame["depth [m]"], dtype=float)
+    values = numpy.asarray(data_frame["conductivity_inf [S/m]"], dtype=float)
+    mask = numpy.isfinite(depth) & numpy.isfinite(values)
+    depth = depth[mask]
+    values = values[mask]
+    order = numpy.argsort(depth)
+    depth = depth[order]
+    values = values[order]
+    return numpy.trapezoid(values, depth) / (depth[-1] - depth[0])

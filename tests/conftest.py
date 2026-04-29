@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 
+import pandas
 import pytest
 from pandas import DataFrame
 
@@ -11,18 +12,13 @@ def data_path() -> Path:
 
 
 @pytest.fixture
-def boreholes_path(data_path: Path) -> Path:
-    return data_path / "BoreholeLocations.csv"
-
-
-@pytest.fixture
-def attenuation_path(data_path: Path) -> Path:
-    return data_path / "FullDataSet_Randomized_head.txt"
-
-
-@pytest.fixture
 def sample_data_path(data_path: Path) -> Path:
     return data_path / "sample_data.json"
+
+
+@pytest.fixture
+def wais_divide_imp(data_path: Path) -> DataFrame:
+    return pandas.read_csv(data_path / "waisdivide_imp.csv")
 
 
 @pytest.fixture

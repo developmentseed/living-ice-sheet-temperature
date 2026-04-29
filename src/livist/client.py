@@ -4,7 +4,6 @@ from collections import defaultdict
 from io import StringIO
 from pathlib import Path
 
-import numpy
 import pandas
 import tqdm
 from pandas import DataFrame
@@ -12,7 +11,7 @@ from pykrige import OrdinaryKriging
 from pyproj import Transformer
 
 from . import temperature
-from .borehole import Borehole
+from .borehole import Borehole, get_borehole_conductivity
 from .config import Config
 from .temperature import Mode
 
@@ -171,15 +170,7 @@ class Client:
                     proj_x, proj_y = transformer.transform(borehole.lat, borehole.lon)
                     borehole_x.append(proj_x)
                     borehole_y.append(proj_y)
-                    rows = data_frame[["depth [m]", "conductivity_inf [S/m]"]].dropna()
-                    depth = numpy.asarray(rows["depth [m]"])
-                    conductivity.append(
-                        numpy.trapezoid(
-                            numpy.asarray(rows["conductivity_inf [S/m]"]),
-                            depth,
-                        )
-                        / (depth[-1] - depth[0])
-                    )
+                    conductivity.append(get_borehole_conductivity(data_frame))
         return OrdinaryKriging(borehole_x, borehole_y, conductivity)
 
     def write_temperature_file(
