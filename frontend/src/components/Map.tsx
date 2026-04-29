@@ -279,7 +279,7 @@ function Legend({
           <RadioGroup.Item value="conductivity">
             <RadioGroup.ItemHiddenInput />
             <RadioGroup.ItemIndicator />
-            <RadioGroup.ItemText>Conductivity</RadioGroup.ItemText>
+            <RadioGroup.ItemText>Impurities</RadioGroup.ItemText>
           </RadioGroup.Item>
         </VStack>
       </RadioGroup.Root>
@@ -300,7 +300,7 @@ function Legend({
         />
         <LegendItem
           color={BOREHOLE_COLORS.temperatureConductivity.hex}
-          label="Temperature + conductivity"
+          label="Temperature + impurities"
         />
         <LegendItem
           color={BOREHOLE_COLORS.temperatureGrainSize.hex}
