@@ -9,7 +9,7 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { COORDINATE_SYSTEM } from "@deck.gl/core";
+import { COORDINATE_SYSTEM, PickingInfo } from "@deck.gl/core";
 import { OrthographicView } from "@deck.gl/core";
 import { GeoJsonLayer, IconLayer } from "@deck.gl/layers";
 import { DeckGL } from "@deck.gl/react";
@@ -74,6 +74,9 @@ const BASEMAP_CATEGORY_COLORS: Record<string, Rgba> = {
   Ocean: [163, 189, 209, 255],
 };
 const DEFAULT_BASEMAP_COLOR: Rgba = [222, 220, 210, 255];
+
+const SOURCE_COOP_BASE = "https://source.coop/englacial/ice-sheet-temperature";
+const TEMPERATURE_URL = `${SOURCE_COOP_BASE}/temperature`;
 
 const VIEW = new OrthographicView({ id: "ortho", flipY: false });
 
@@ -184,6 +187,16 @@ export default function Map() {
         controller
         layers={layers}
         getCursor={({ isHovering }) => (isHovering ? "pointer" : "grab")}
+        onClick={(info: PickingInfo) => {
+          const layerId = info.layer?.id;
+          if (!layerId || !info.object) return;
+          if (layerId === "boreholes") {
+            const url = boreholeSourceCoopUrl(info.object as Feature);
+            if (url) window.open(url, "_blank", "noopener,noreferrer");
+          } else if (layerId.startsWith("temperatures-")) {
+            window.open(TEMPERATURE_URL, "_blank", "noopener,noreferrer");
+          }
+        }}
         getTooltip={({ object }: { object?: Feature }) => {
           if (!object?.properties) return null;
           if (object.properties.name) return object.properties.name;
@@ -316,6 +329,17 @@ function projectPoints(data: FeatureCollection): FeatureCollection {
       };
     }),
   };
+}
+
+function boreholeSourceCoopUrl(feature: Feature): string | null {
+  const p = feature.properties ?? {};
+  const url =
+    p.temperature_data_url ?? p.chemistry_data_url ?? p.grainsize_data_url;
+  if (typeof url !== "string") return null;
+  const parts = url.split("AntarcticaBoreholeData/");
+  if (parts.length !== 2) return null;
+  const folder = parts[1].split("/")[0];
+  return `${SOURCE_COOP_BASE}/AntarcticaBoreholeData/${folder}`;
 }
 
 function boreholeIcon(feature: Feature) {
