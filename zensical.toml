@@ -7,7 +7,7 @@ copyright = "Copyright &copy; 2026 Development Seed"
 edit_uri = "edit/main/docs/"
 nav = [
     "index.md",
-    "chemistry-kriging.md",
+    "conductivity-kriging.md",
     "temperature-comparison.md",
     {"API" = [
         "api/index.md",
