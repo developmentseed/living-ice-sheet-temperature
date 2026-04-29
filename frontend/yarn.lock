@@ -911,20 +911,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@luma.gl/core@npm:^9.3.2":
-  version: 9.3.2
-  resolution: "@luma.gl/core@npm:9.3.2"
-  dependencies:
-    "@math.gl/types": "npm:^4.1.0"
-    "@probe.gl/env": "npm:^4.1.1"
-    "@probe.gl/log": "npm:^4.1.1"
-    "@probe.gl/stats": "npm:^4.1.1"
-    "@types/offscreencanvas": "npm:^2019.7.3"
-  checksum: 10c0/5450f84e7cae241fd5801ceb12e10cf574b85565a9c7afff97bf2f5cc394ec21734e57b86fb78cab8416414b0e777bb0e20a8d533bc79151eeb64248898dd178
-  languageName: node
-  linkType: hard
-
-"@luma.gl/core@npm:~9.3.3":
+"@luma.gl/core@npm:^9.3.2, @luma.gl/core@npm:~9.3.2":
   version: 9.3.3
   resolution: "@luma.gl/core@npm:9.3.3"
   dependencies:
@@ -937,22 +924,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@luma.gl/engine@npm:^9.3.2":
-  version: 9.3.2
-  resolution: "@luma.gl/engine@npm:9.3.2"
-  dependencies:
-    "@math.gl/core": "npm:^4.1.0"
-    "@math.gl/types": "npm:^4.1.0"
-    "@probe.gl/log": "npm:^4.1.1"
-    "@probe.gl/stats": "npm:^4.1.1"
-  peerDependencies:
-    "@luma.gl/core": ~9.3.0
-    "@luma.gl/shadertools": ~9.3.0
-  checksum: 10c0/1a63efefcc6835d3be2c9a2e558673c865e5eb852b1369dceb243c4b7fe8b1394a7c837617ccd4e22c707ddc668be5becfe667f9e3c3d4a6d060a4764eca8e7a
-  languageName: node
-  linkType: hard
-
-"@luma.gl/engine@npm:~9.3.3":
+"@luma.gl/engine@npm:^9.3.2, @luma.gl/engine@npm:~9.3.2":
   version: 9.3.3
   resolution: "@luma.gl/engine@npm:9.3.3"
   dependencies:
@@ -983,19 +955,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@luma.gl/shadertools@npm:^9.3.2":
-  version: 9.3.2
-  resolution: "@luma.gl/shadertools@npm:9.3.2"
-  dependencies:
-    "@math.gl/core": "npm:^4.1.0"
-    "@math.gl/types": "npm:^4.1.0"
-  peerDependencies:
-    "@luma.gl/core": ~9.3.0
-  checksum: 10c0/aa2cbeba6b34c043aeafce96c5c67aca1b06191a608470dc8ee0b22ef39a98e77fd910d12c6a094ceb38d8da8ee9ac1435992b949bbd4c2fa84fc58e33ec3393
-  languageName: node
-  linkType: hard
-
-"@luma.gl/shadertools@npm:~9.3.3":
+"@luma.gl/shadertools@npm:^9.3.2, @luma.gl/shadertools@npm:~9.3.2":
   version: 9.3.3
   resolution: "@luma.gl/shadertools@npm:9.3.3"
   dependencies:
@@ -1318,16 +1278,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@swc/helpers@npm:^0.5.0":
-  version: 0.5.19
-  resolution: "@swc/helpers@npm:0.5.19"
-  dependencies:
-    tslib: "npm:^2.8.0"
-  checksum: 10c0/30317ee644d390c88dd975b11b5260f7c70602bfb81ec386b3807d97a763215df7f501e43b0246e0773150fcfd835349bcdcb3b220d121e485ee528a72b5fd79
-  languageName: node
-  linkType: hard
-
-"@swc/helpers@npm:^0.5.11":
+"@swc/helpers@npm:^0.5.0, @swc/helpers@npm:^0.5.11":
   version: 0.5.21
   resolution: "@swc/helpers@npm:0.5.21"
   dependencies:
@@ -3384,9 +3335,9 @@ __metadata:
     "@emotion/react": "npm:^11"
     "@loaders.gl/core": "npm:^4.4.1"
     "@loaders.gl/mvt": "npm:^4.4.1"
-    "@luma.gl/core": "npm:~9.3.3"
-    "@luma.gl/engine": "npm:~9.3.3"
-    "@luma.gl/shadertools": "npm:~9.3.3"
+    "@luma.gl/core": "npm:~9.3.2"
+    "@luma.gl/engine": "npm:~9.3.2"
+    "@luma.gl/shadertools": "npm:~9.3.2"
     "@mapbox/tilebelt": "npm:^2.0.3"
     "@tanstack/react-query": "npm:^5.100.5"
     "@trivago/prettier-plugin-sort-imports": "npm:^6.0.2"
@@ -3748,13 +3699,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"picomatch@npm:^4.0.3":
-  version: 4.0.3
-  resolution: "picomatch@npm:4.0.3"
-  checksum: 10c0/9582c951e95eebee5434f59e426cddd228a7b97a0161a375aed4be244bd3fe8e3a31b846808ea14ef2c8a2527a6eeab7b3946a67d5979e81694654f939473ae2
-  languageName: node
-  linkType: hard
-
 "picomatch@npm:^4.0.4":
   version: 4.0.4
   resolution: "picomatch@npm:4.0.4"
@@ -3812,17 +3756,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"proj4@npm:*":
-  version: 2.20.4
-  resolution: "proj4@npm:2.20.4"
-  dependencies:
-    mgrs: "npm:1.0.0"
-    wkt-parser: "npm:^1.5.3"
-  checksum: 10c0/bb83915ae7973068f02ca440099faca7efd6b1add3cd2903fe8ce816f4d589bd72ac77c9a882d3d60c7beff2cb9d9fb38924590978a87a7165156cb120c8328c
-  languageName: node
-  linkType: hard
-
-"proj4@npm:^2.20.8":
+"proj4@npm:*, proj4@npm:^2.20.8":
   version: 2.20.8
   resolution: "proj4@npm:2.20.8"
   dependencies:
@@ -4187,17 +4121,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tinyglobby@npm:^0.2.12":
-  version: 0.2.15
-  resolution: "tinyglobby@npm:0.2.15"
-  dependencies:
-    fdir: "npm:^6.5.0"
-    picomatch: "npm:^4.0.3"
-  checksum: 10c0/869c31490d0d88eedb8305d178d4c75e7463e820df5a9b9d388291daf93e8b1eb5de1dad1c1e139767e4269fe75f3b10d5009b2cc14db96ff98986920a186844
-  languageName: node
-  linkType: hard
-
-"tinyglobby@npm:^0.2.16":
+"tinyglobby@npm:^0.2.12, tinyglobby@npm:^0.2.16":
   version: 0.2.16
   resolution: "tinyglobby@npm:0.2.16"
   dependencies:
@@ -4352,13 +4276,6 @@ __metadata:
   bin:
     node-which: bin/which.js
   checksum: 10c0/7e710e54ea36d2d6183bee2f9caa27a3b47b9baf8dee55a199b736fcf85eab3b9df7556fca3d02b50af7f3dfba5ea3a45644189836df06267df457e354da66d5
-  languageName: node
-  linkType: hard
-
-"wkt-parser@npm:^1.5.3":
-  version: 1.5.4
-  resolution: "wkt-parser@npm:1.5.4"
-  checksum: 10c0/70d85e2a4abea83c94021ffc5e11a8d25e9b70b0989d762c470a57600a4ee930d537366b608b26f3fba7f371c4e6d8d814a074831e7cc2914efa4e3cbddc8913
   languageName: node
   linkType: hard
 
