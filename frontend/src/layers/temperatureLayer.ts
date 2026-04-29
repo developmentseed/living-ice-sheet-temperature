@@ -14,10 +14,10 @@ const toEpsg3031 = proj4("EPSG:4326", EPSG3031);
 
 type Rgba = [number, number, number, number];
 
-const TEMP_MIN = 245;
-const TEMP_MAX = 270;
+export const TEMP_MIN = 245;
+export const TEMP_MAX = 270;
 
-const COLOR_STOPS: Rgba[] = [
+export const COLOR_STOPS: Rgba[] = [
   [49, 54, 149, 200],
   [69, 117, 180, 200],
   [116, 173, 209, 200],

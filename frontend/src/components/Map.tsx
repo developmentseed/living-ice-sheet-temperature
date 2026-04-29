@@ -22,7 +22,12 @@ import {
   useBoreholes,
   useTemperatureSources,
 } from "../hooks/usePublic";
-import { createTemperatureLayer } from "../layers/temperatureLayer";
+import {
+  COLOR_STOPS,
+  TEMP_MAX,
+  TEMP_MIN,
+  createTemperatureLayer,
+} from "../layers/temperatureLayer";
 
 const EPSG3031 =
   "+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs";
@@ -278,6 +283,7 @@ function Legend({
           </RadioGroup.Item>
         </VStack>
       </RadioGroup.Root>
+      <TemperatureScale />
       <Checkbox.Root
         size="sm"
         checked={showBoreholes}
@@ -314,6 +320,21 @@ function LegendItem({ color, label }: { color: string; label: string }) {
       </svg>
       <Text fontSize="xs">{label}</Text>
     </HStack>
+  );
+}
+
+function TemperatureScale() {
+  const gradient = `linear-gradient(to right, ${COLOR_STOPS.map(
+    ([r, g, b]) => `rgb(${r}, ${g}, ${b})`,
+  ).join(", ")})`;
+  return (
+    <VStack gap="1" alignItems="stretch" pl="6" w="160px">
+      <Box h="10px" borderRadius="sm" style={{ background: gradient }} />
+      <HStack justifyContent="space-between">
+        <Text fontSize="xs">{(TEMP_MIN - 273.15).toFixed(0)} °C</Text>
+        <Text fontSize="xs">{(TEMP_MAX - 273.15).toFixed(0)} °C</Text>
+      </HStack>
+    </VStack>
   );
 }
 
