@@ -56,10 +56,14 @@ def compute_along_track(
     )
     temperature = numpy.full_like(sigma, numpy.nan, dtype=float)
     for i in tqdm.tqdm(range(sigma.size), desc="Computing temperature"):
+        if not numpy.isfinite(sigma[i]) or sigma[i] <= 0:
+            continue
         if kriged_conductivity and kriged_temperature:
-            residual_function = _conductivity_residual(
-                kriged_conductivity[i], kriged_temperature[i]
-            )
+            c = kriged_conductivity[i]
+            t_ref = kriged_temperature[i]
+            if not (numpy.isfinite(c) and numpy.isfinite(t_ref)) or c <= 0:
+                continue
+            residual_function = _conductivity_residual(c, t_ref)
         else:
             residual_function = _pure_ice_residual
         try:

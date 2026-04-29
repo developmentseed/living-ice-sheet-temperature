@@ -56,7 +56,7 @@ conductivity_grid = numpy.ma.masked_where(~inside, conductivity_grid)
 conductivity_grid.shape
 ```
 
-    /var/folders/yp/d6xvrkd943dgvqg5s9cpymc40000gn/T/ipykernel_79665/3607599808.py:11: DeprecationWarning: The 'shapely.vectorized.contains' function is deprecated and will be removed a future version. Use 'shapely.contains_xy' instead (available since shapely 2.0.0).
+    /var/folders/yp/d6xvrkd943dgvqg5s9cpymc40000gn/T/ipykernel_452/3607599808.py:11: DeprecationWarning: The 'shapely.vectorized.contains' function is deprecated and will be removed a future version. Use 'shapely.contains_xy' instead (available since shapely 2.0.0).
       inside = shapely.vectorized.contains(ice_sheet, mesh_x, mesh_y)
 
 
